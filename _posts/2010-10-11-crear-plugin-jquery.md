@@ -1,6 +1,6 @@
 ---
 layout: post
-comments: true
+comments: false
 title: Crear un plugin en JQuery
 date: 2010-10-11 14:39:00
 ---

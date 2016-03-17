@@ -1,6 +1,6 @@
 ---
 layout: post
-comments: true
+comments: false
 title: Uso de JSON con JavaScript
 date: 2010-02-10 13:02:00
 ---

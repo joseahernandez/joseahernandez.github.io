@@ -1,6 +1,6 @@
 ---
 layout: post
-comments: true
+comments: false
 title: Consultas a bases de datos desde PHP con PDO
 date: 2012-07-01 19:27:00
 ---

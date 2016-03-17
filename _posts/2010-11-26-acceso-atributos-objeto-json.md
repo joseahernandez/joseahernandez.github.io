@@ -1,6 +1,6 @@
 ---
 layout: post
-comments: true
+comments: false
 title: Acceder a los atributos de objetos JSON
 date: 2010-11-26 10:43:00
 ---
