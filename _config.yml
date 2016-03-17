@@ -3,8 +3,11 @@ author: Jose Hernández
 twitter: josehernandz
 domain: http://josehernandez.xyz
 
-highlighter: pygments
 markdown: kramdown
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 
 excerpt_separator: <!--more-->
 
