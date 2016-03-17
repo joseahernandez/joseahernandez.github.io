@@ -1,0 +1,61 @@
+---
+layout: default
+---
+
+<div class="content">
+
+    {% for post in paginator.posts %}
+        <div>
+            <div class="info-container">
+                <h1 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h1>
+                <span class="post-date">
+                    {% assign m = post.date | date: "%-m" %}
+                    {{ post.date | date: "%-d" }}
+                    de
+                    {% case m %}
+                      {% when '1' %}Enero
+                      {% when '2' %}Febrero
+                      {% when '3' %}Marzo
+                      {% when '4' %}Abril
+                      {% when '5' %}Mayo
+                      {% when '6' %}Junio
+                      {% when '7' %}Julio
+                      {% when '8' %}Agosto
+                      {% when '9' %}Septiembre
+                      {% when '10' %}Octubre
+                      {% when '11' %}Noviembre
+                      {% when '12' %}Diciembre
+                    {% endcase %}
+                    de
+                    {{ post.date | date: "%Y" }}
+                    por {% if post.author %} {{ post.author }} {% else %} {{ site.author }} {% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="post">
+            {{ post.excerpt }}
+            <p class="read-more">
+                <a href="{{ post.url }}">Leer más</a>
+            </p>
+        </div>
+        <div class="colophon">
+        </div>
+    {% endfor %}
+
+    {% if paginator.total_pages > 1 %}
+    <div class="pagination">
+        {% if paginator.previous_page %}
+            <div class="newer">
+                <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">Nuevas</a>
+            </div>
+        {% endif %}
+
+
+        {% if paginator.next_page %}
+            <div class="older">
+                <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Antiguas</a>
+            </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>

@@ -1,0 +1,16 @@
+title: Jose Hernández
+author: Jose Hernández
+twitter: josehernandz
+domain: http://josehernandez.xyz
+
+highlighter: pygments
+
+excerpt_separator: <!--more-->
+
+paginate: 6
+
+collections:
+  - works
+
+gems:
+  - jekyll-sitemap

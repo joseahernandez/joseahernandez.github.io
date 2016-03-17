@@ -1,0 +1,447 @@
+/*****************************************************************************/
+/*
+/* Common
+/*
+/*****************************************************************************/
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  color: #4a4a4a;
+  background-color: #fafbfc;
+  font-family: 'Raleway', Arial, sans-serif;
+  font-weight: 400;
+  font-size: 0.85em;
+  overflow: hidden;
+}
+
+a {
+  color: #8085C1;
+  text-decoration: none;
+  border: none;
+}
+
+a img {
+  outline: none;
+}
+
+a:hover {
+  color: #555;
+  border: none;
+}
+
+.separator {
+  color: #555;
+}
+
+/*****************************************************************************/
+/*
+/* Menu
+/*
+/*****************************************************************************/
+.menu {
+  border-top: 1px solid #e7e7e7;
+  margin-top: 1em;
+  padding-top: 1.5em;
+  padding-bottom: 0.75em;
+}
+
+.menu a {
+  color: #444;
+}
+
+.menu-list {
+  list-style-type: none;
+}
+
+.menu-list li {
+  text-align: center;
+  line-height: 1.75em;
+}
+
+.menu-link {
+  margin-bottom: 0.75em;
+}
+
+.menu-title {
+  font-weight: 600;
+  font-size: 1.25em;
+  text-transform: uppercase;
+}
+
+/*****************************************************************************/
+/*
+/* Site
+/*
+/*****************************************************************************/
+
+.site {
+  height: 100%;
+  width: 100%;
+  /*line-height: 1.25em;*/
+}
+
+.title {
+  display: inline-block;
+  text-align: right;
+  line-height: 25px;
+}
+
+.title a {
+  color: #000;
+}
+
+.tagline {
+  width: 100%;
+  color: #787878;
+  font-weight: 600;
+  text-align: right;
+  margin-top: 0.5em;
+  display: block;
+}
+
+.footer {
+  font-size: 0.95em;
+  border-top: 1px solid #e7e7e7;
+  padding-top: 1.25em;
+  padding-bottom: 1.5em;
+  overflow: hidden;
+  float: center;
+  text-align: center;
+}
+
+#footer-links a, #footer-links a:hover {
+  font-size: 3.5em;
+  color: #000000;
+  text-decoration: none;
+  font-family: icomoon;
+}
+
+/*****************************************************************************/
+/*
+/* Posts
+/*
+/*****************************************************************************/
+.info-container {
+  margin-top: 3em;
+  margin-bottom: 2em;
+  margin-left: -1em;
+  max-width: 725px;
+}
+
+.post-title {
+  color: #4a4a4a;
+  font-size: 2.7em;
+}
+
+.post-title a {
+  color: #4a4a4a;
+}
+
+.post-date {
+  padding-top: 0.5em;
+  margin-bottom: 2em;
+  margin-left: 0.5em;
+}
+
+.post {
+  line-height: 24px;
+  max-width: 725px;
+  clear: both;
+}
+
+.post h2 {
+  margin-top: 1.25em;
+  margin-left: -0.5em;
+  margin-bottom: 1.25em;
+}
+
+.post a:hover, .post a:visited {
+  border: none;
+  color: #8085C1;
+}
+
+/* standard */
+.post pre {
+  border: 1px solid #ddd;
+  background-color: #eef;
+  padding: 0 .4em;
+  margin-bottom: 1.45em;
+  font-size: 14px;
+  background: #ffffff;
+}
+
+.post pre code {
+  background-color: #ffffff;
+}
+
+.post p, .post ul, .post ol {
+  font-family: 'Source Sans Pro', Arial, sans-serif;
+  font-size: 17px;
+  margin-bottom: 1.45em;
+  text-align: justify;
+}
+
+.post ul, .post ol {
+  margin-left: 2.35em;
+  margin-bottom: 1.25em;
+}
+
+.post ul li {
+  margin-bottom: 15px;
+}
+
+.post code {
+  border: 1px solid #ddd;
+  background-color: #eef;
+  padding: 0 .2em;
+}
+
+.post pre code {
+  border: none;
+}
+
+/* terminal */
+.post pre.terminal {
+  border: 1px solid #000;
+  background-color: #333;
+  color: #FFF;
+}
+
+.post pre.terminal code {
+  background-color: #333;
+}
+
+.post p.read-more {
+  text-align: right;
+}
+
+.post p.read-more a {
+  color: #444;
+  font-weight: bold;
+}
+
+/*****************************************************************************/
+/*
+/* Sidebar and Content
+/*
+/*****************************************************************************/
+
+.sidebar,
+.content {
+  vertical-align: top;
+  height: 100%;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar {
+  float: left;
+  width: 14%;
+  padding-left: 11em;
+  padding-right: 2.125em;
+  border-right: 1px solid #e7e7e7;
+}
+
+.content {
+  padding-left: 2.125em;
+}
+
+.header {
+  text-align: center;
+  padding-top: 2.5em;
+  font-size: 1.1em;
+}
+
+.post-link {
+  margin-bottom: 0.75em;
+}
+
+/*****************************************************************************/
+/*
+/* Colophon
+/*
+/*****************************************************************************/
+
+.colophon {
+  margin-top: 1.5em;
+  margin-bottom: 5.50em; /*1.45em;*/
+  border-top: 1px dotted #e7e7e7;
+}
+
+.colophon p {
+  margin-top: 1.25em;
+  font-size: 0.95em;
+  color: #777;
+}
+
+/*****************************************************************************/
+/*
+/* Pagination
+/*
+/*****************************************************************************/
+
+.pagination {
+  max-width: 725px;
+  margin-bottom: 150px;
+  font-size: 17px;
+}
+
+.pagination .older {
+  float: right;
+}
+
+.pagination .newer {
+  float: left;
+}
+
+/*****************************************************************************/
+/*
+/* Fonts
+/*
+/*****************************************************************************/
+
+@font-face {
+    font-family: 'icomoon';
+    src: url('../font/icomoon.eot');
+    src: url('../font/icomoon.eot') format('embedded-opentype'),
+         url('../font/icomoon.ttf') format('truetype'),
+         url('../font/icomoon.woff') format('woff'),
+         url('../font/icomoon.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+font-family: 'icomoon' !important;
+speak: none;
+font-style: normal;
+font-weight: normal;
+font-variant: normal;
+text-transform: none;
+line-height: 1;
+
+/* Better Font Rendering =========== */
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-rss-square:before {
+  content: "\44";
+}
+.icon-feed:before {
+  content: "\64";
+}
+.icon-linkedin-square:before {
+  content: "\43";
+}
+.icon-linkedin:before {
+  content: "\63";
+}
+.icon-github-square:before {
+  content: "\42";
+}
+.icon-github:before {
+  content: "\62";
+}
+.icon-twitter-square:before {
+  content: "\41";
+}
+.icon-twitter:before {
+  content: "\61";
+}
+
+
+/*****************************************************************************/
+/*
+/* Disqus
+/*
+/*****************************************************************************/
+
+#disqus_thread {
+  max-width: 750px;
+}
+
+/*****************************************************************************/
+/*
+/* Mobile nav
+/*
+/*****************************************************************************/
+
+.mobile-nav {
+  position: fixed;
+  top: 0px;
+  height: 45px;
+  width: 100%;
+  z-index: 3000;
+  border-bottom: 1px solid #e7e7e7;
+  background-color: #ffffff;
+}
+
+.nav-button {
+  float: left;
+  padding: 7px 10px 4px;
+  margin: 8px 10px;
+}
+
+.nav-button-bar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin-bottom: 3px;
+  background-color: #8085C1;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+.mobile-nav h1, .mobile-nav a, .mobile-nav a:hover, .mobile-nav a:visited {
+  float: right;
+  color: #4a4a4a;
+  padding: 5px 15px 5px 5px;
+}
+
+.highlight {
+  font-size: 14px;
+  margin-bottom: 1.45em;
+}
+
+.highlight pre {
+  padding: 9.5px;
+  background-color: #ffffff;
+}
+
+.highlight pre code {
+  background-color: #ffffff;
+}
+
+.lineno {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+}
+
+.pagination div {
+  border: 1px solid #000000;
+  padding: 12px;
+  border-radius: 10px;
+  background-color: #000000;
+}
+
+.pagination div a {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.text-center {
+  text-align: center;
+}

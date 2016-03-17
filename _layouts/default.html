@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{% if page.title %} {{ page.title }} {% else %} {{ site.title }} {% endif %}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/main.css">
+
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/responsive.css">
+
+    <!-- Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:300,400,700' rel='stylesheet' type='text/css'>
+
+    {{ metatag }}
+
+  </head>
+  <body>
+    <div class="site">
+      <div class="sidebar" id="sidebar">
+        <div class="header">
+          <h1 class="title"><a href="/">Jose Hernández</a></h1>
+          <span class="tagline">Software Developer</span>
+        </div>
+        <div class="menu">
+          <ul class="menu-list">
+              <li class="menu-link">
+                <a class="menu-title" href="/">POSTS</a>
+              </li>
+          </ul>
+        </div>
+
+        <div class="footer">
+          <span id="footer-links">
+            <a target="_blank" href="https://twitter.com/josehernandz" class="icon-twitter-square"></a>
+            <span class="separator">&nbsp;</span>
+            <a target="_blank" href="https://github.com/joseahernandez" class="icon-github-square"></a>
+            <span class="separator">&nbsp;</span>
+            <a target="_blank" href="https://es.linkedin.com/in/josehernandezhigueras" class="icon-linkedin-square"></a>
+            <span class="separator">&nbsp;</span>
+            <a href="/rss.xml" class="icon-rss-square"></a>
+          </span>
+        </div>
+      </div>
+
+      <div class="mobile-nav">
+        <span class="nav-button" id="mobile-nav-button">
+          <span class="nav-button-bar"></span>
+          <span class="nav-button-bar"></span>
+          <span class="nav-button-bar"></span>
+        </span>
+        <h1><a href="/">Jose Hernández</a></h1>
+      </div>
+
+      {{ content }}
+
+    </div>
+    <script src="{{ site.baseurl }}/js/responsive.js"></script>
+    <script src="{{ site.baseurl }}/js/analytics.js" defer></script>
+  </body>
+</html>

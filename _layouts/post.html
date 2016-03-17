@@ -1,0 +1,59 @@
+---
+layout: default
+---
+
+<div class="content" id="home">
+    <div id="post-info">
+        <div class="info-container">
+            <h1 class="post-title">{{ page.title }}</h1>
+      <span class="post-date">
+        {% assign m = page.date | date: "%-m" %}
+        {{ page.date | date: "%-d" }}
+        de
+        {% case m %}
+          {% when '1' %}Enero
+          {% when '2' %}Febrero
+          {% when '3' %}Marzo
+          {% when '4' %}Abril
+          {% when '5' %}Mayo
+          {% when '6' %}Junio
+          {% when '7' %}Julio
+          {% when '8' %}Agosto
+          {% when '9' %}Septiembre
+          {% when '10' %}Octubre
+          {% when '11' %}Noviembre
+          {% when '12' %}Diciembre
+        {% endcase %}
+        de
+        {{ page.date | date: "%Y" }}
+        por {% if page.author %}{{page.author}}{% else %}{{site.author}}{% endif %}
+      </span>
+        </div>
+    </div>
+
+    <div class="post">
+        {{ content }}
+    </div>
+    <div class="colophon">
+    </div>
+
+
+    {% if page.comments %}
+    <div id="disqus_thread"></div>
+    <script language="javascript">
+        var disqus_config = function () {
+            this.page.url = 'http://josehernandez.xyz{{ page.url }}';
+            this.page.title = '{{page.title}}';
+            this.page.identifier = 'http://josehernandez.xyz{{ page.url }}';
+        };
+
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = 'http://josehernandez.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    {% endif %}
+</div>
+

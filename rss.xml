@@ -1,0 +1,22 @@
+---
+sitemap: false
+---
+
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Jose Hernández</title>
+        <link>{{ site.domain }}</link>
+        <description>Software developer</description>
+        <atom:link href="{{ site.domain }}/rss.xml" rel="self" type="application/rss+xml" />
+
+        {% for post in site.posts limit: 10 %}
+            <item>
+                <guid>{{ site.domain }}{{ post.url }}</guid>
+                <title>{{ post.title }}</title>
+                <link>{{ site.domain }}{{ post.url }}</link>
+                <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
+                <description><![CDATA[{{ post.content }}]]></description>
+            </item>
+        {% endfor %}
+    </channel>
+</rss>
