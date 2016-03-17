@@ -4,6 +4,7 @@ twitter: josehernandz
 domain: http://josehernandez.xyz
 
 highlighter: pygments
+markdown: kramdown
 
 excerpt_separator: <!--more-->
 
