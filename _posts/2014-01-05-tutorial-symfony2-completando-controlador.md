@@ -32,13 +32,17 @@ Una vez que conocemos estos detalles vamos a ver como usarlos. Si recordamos de 
 
 Con esto en mente, ahora tenemos que modificar la plantilla donde se muestran todas las entradas para añadirles la url del detalle. Para esto usaremos la función **path** que generará una url a la ruta que indiquemos. En nuestro caso la usaremos indicando que genere la ruta a *detail* y como parámetro le indicaremos el slug de la noticia a la que queremos que genere la ruta, como por ejemplo:
 
-    {% raw %}{{ path('details', { 'slug': 'my-first-post'}) }}{% endraw %}
+```html
+{% raw %}{{{% endraw %} path('details', {% raw %}{{% endraw %} 'slug': 'my-first-post'{% raw %}}{% endraw %}) {% raw %}}}{% endraw %}
+```
 
 Como podemos ver, el segundo parámetro de la función **path** es un array de Twig, en el que como clave indicamos el nombre de la variable que pusimos cuando definimos la ruta en el fichero *routing.yml* y el valor será el que queramos que tenga la variable.
 
 Ahora que vamos a crear la ruta para los detalles de los post, también sería buena idea crear una ruta en la etiqueta que indica el número de comentarios que tiene cada post y que apunte directamente al primer comentario de la noticia. Para esto utilizaremos también la función path para que genere la ruta y después le añadiremos el [anchor](http://en.wikipedia.org/wiki/HTML_anchor#Ancho) quedándonos de la siguiente forma:
 
-    {% raw %}{{ path('details', {'slug': 'my-first-post'}) }}#comments{% endraw %}
+```html
+{% raw %}{{ path('details', {'slug': 'my-first-post'}) }}#comments{% endraw %}
+```
 
 Una vez que hemos entendido como funciona la generación de rutas, modificamos la plantilla *index.html.twig* y la dejamos de la siguiente manera:
 
