@@ -147,12 +147,12 @@ Si continuamos tenemos más llamadas a distintos métodos de la clase post en la
 En este momento ya tenemos la página de inicio de nuestro blog completa, ahora para poder ver como queda vamos a editar el controlador con unos datos de prueba para simplemente ver cual es el resultado. Para ello editamos el fichero *DefaultController.php* que se encuentra en la ruta *src/jhernandz/BlogBundle/Controller* y ponemos el siguiente código:
 
 {% highlight php linenos startinline=true %}
-namespace jhernandz\\BlogBundle\\Controller;
+namespace jhernandz\BlogBundle\Controller;
 
-use Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use jhernandz\\BlogBundle\\Entity\\Post;
-use jhernandz\\BlogBundle\\Entity\\User;
+use jhernandz\BlogBundle\Entity\Post;
+use jhernandz\BlogBundle\Entity\User;
 
 class DefaultController extends Controller
 {
@@ -168,7 +168,7 @@ class DefaultController extends Controller
         $post = new Post();
         $post->setTitle('Noticia ' . $i);
         $post->setSlug('Noticia-' . $i);
-        $post->setPublishDate(new \\DateTime());
+        $post->setPublishDate(new \DateTime());
         $post->setAuthor($author);
         $post->setContent('Lorem ipsum dolor sit amet, consectetur ' .
             'adipiscing elit. Donec auctor dolor non purus placerat ' .

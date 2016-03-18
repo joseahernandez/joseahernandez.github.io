@@ -38,44 +38,44 @@ Para comenzar a crear el modelo de datos vamos a la siguiente ruta de nuestro bu
 {% highlight php linenos startinline=true %}
 <?php
 
-namespace jhernandz\\BlogBundle\\Entity;
+namespace jhernandz\BlogBundle\Entity;
 
-use Doctrine\\ORM\\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\\Entity
+ * @ORM\Entity
  */
 class User
 {
     /**
-    * @ORM\\Id
-    * @ORM\\Column(type="integer")
-    * @ORM\\GeneratedValue
+    * @ORM\Id
+    * @ORM\Column(type="integer")
+    * @ORM\GeneratedValue
     */
     protected $id;
 
     /**
-    * @ORM\\Column(type="string", length=255)
+    * @ORM\Column(type="string", length=255)
     */
     protected $name;
     
     /**
-    * @ORM\\Column(type="string", length=255)
+    * @ORM\Column(type="string", length=255)
     */
     protected $lastName;
     
     /**
-    * @ORM\\Column(type="string", length=255)
+    * @ORM\Column(type="string", length=255)
     */
     protected $email;
     
     /**
-    * @ORM\\Column(type="string", length=255)
+    * @ORM\Column(type="string", length=255)
     */
     protected $password;
     
     /**
-    * @ORM\\OneToMany(targetEntity="jhernandz\\BlogBundle\\Entity\\Post", 
+    * @ORM\OneToMany(targetEntity="jhernandz\BlogBundle\Entity\Post",
     *    mappedBy="author")
     */
     protected $posts;
@@ -83,70 +83,70 @@ class User
     
     public function __toString() 
     { 
-        return $this->name . '' '' . $this->lastName; 
+        return $this->name . ' ' . $this->lastName; 
     }
 }
 {% endhighlight %}
 
 Como se puede ver, tanto encima de la declaración de la clase como en la declaración de cada atributo existen unos comentarios. A estos comentarios se le llaman anotaciones y sirven para identificar las propiedades y la entidad con la finalidad de que Doctrine procese los datos adecuadamente para relacionarse con la base de datos.
 
-Antes de declarar la clase, con la anotación *@ORM\\Entity* estamos indicando que esta clase será una entidad. A continuación encima del atributo *id* ponemos las anotaciones que indican que es la clave primaria de la entidad *@ORM\\Id*, el tipo que es, en este caso un entero *@ORM\\Column(type="integer")* y si el valor es autogenerado *@ORM\\GeneratedValue*. Como se puede ver a lo largo de la declaración de la entidad el tipo de la columna puede variar para ajustarse al tipo de datos que se necesita en cada ocasión. Para ver más detalles sobre las anotaciones se le puede dar un vistazo a la [documentación de Doctrine](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html#doctrine-mapping-types).
+Antes de declarar la clase, con la anotación *@ORM\Entity* estamos indicando que esta clase será una entidad. A continuación encima del atributo *id* ponemos las anotaciones que indican que es la clave primaria de la entidad *@ORM\Id*, el tipo que es, en este caso un entero *@ORM\Column(type="integer")* y si el valor es autogenerado *@ORM\GeneratedValue*. Como se puede ver a lo largo de la declaración de la entidad el tipo de la columna puede variar para ajustarse al tipo de datos que se necesita en cada ocasión. Para ver más detalles sobre las anotaciones se le puede dar un vistazo a la [documentación de Doctrine](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html#doctrine-mapping-types).
 
-Una de las anotaciones que llama más la atención es la que está sobre la variable *posts*, esta variable nos interesa que contenga un array con todos los post que ha publicado el usuario, por lo tanto será una relación de uno a muchos. Para definir esta relación utilizamos la anotacion *@ORM\\OneToMany(targetEntity="jhernandz\\BlogBundle\\Entity\\Post", mappedBy="author")* en la que indicamos que se relacionara con la entidad que posteriormente crearemos y llamaremos *Post* y se encontrará en el mismo bundle. Con el atributo *mappedBy* le indicamos que está relación estará mapeada en la entidad Post por el atributo *author*.
+Una de las anotaciones que llama más la atención es la que está sobre la variable *posts*, esta variable nos interesa que contenga un array con todos los post que ha publicado el usuario, por lo tanto será una relación de uno a muchos. Para definir esta relación utilizamos la anotacion *@ORM\OneToMany(targetEntity="jhernandz\BlogBundle\Entity\Post", mappedBy="author")* en la que indicamos que se relacionara con la entidad que posteriormente crearemos y llamaremos *Post* y se encontrará en el mismo bundle. Con el atributo *mappedBy* le indicamos que está relación estará mapeada en la entidad Post por el atributo *author*.
 
 Al final de la clase he declarado un método llamado *__toString*. Este es método es uno de los [Magic Methods](http://www.php.net/manual/en/language.oop5.magic.php) de PHP que permitirá que cada vez que se imprima por pantalla este objeto, el resultado será lo que se indica en este método, en nuestro caso el nombre y el apellido.
 
-Antes de continuar hay que aclarar que para que las anotaciones funcionen correctamente, hemos tenido que importar previamente el namespace *Doctrine\\ORM\\Mapping* y lo hemos renombrado como *ORM*, por ello toda declaración de las anotaciones va precedida de estas siglas.
+Antes de continuar hay que aclarar que para que las anotaciones funcionen correctamente, hemos tenido que importar previamente el namespace *Doctrine\ORM\Mapping* y lo hemos renombrado como *ORM*, por ello toda declaración de las anotaciones va precedida de estas siglas.
 
 Pasamos ahora a definir la entidad Post, creamos un nuevo fichero en la misma ruta donde se encuentra el fichero *User.php* y lo llamamos *Post.php*. En él pondremos el siguiente contenido:
 
 {% highlight php linenos startinline=true %}
 <?php
 
-namespace jhernandz\\BlogBundle\\Entity;
+namespace jhernandz\BlogBundle\Entity;
 
-use Doctrine\\ORM\\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\\Entity
+ * @ORM\Entity
  */
 class Post
 {
     /**
-    * @ORM\\Id
-    * @ORM\\Column(type="integer")
-    * @ORM\\GeneratedValue
+    * @ORM\Id
+    * @ORM\Column(type="integer")
+    * @ORM\GeneratedValue
     */
     protected $id;
     
     /**
-    * @ORM\\Column(type="string", length=255)
+    * @ORM\Column(type="string", length=255)
     */
     protected $title;
     
     /**
-    * @ORM\\Column(type="string", length=255)
+    * @ORM\Column(type="string", length=255)
     */
     protected $slug;
     
     /**
-    * @ORM\\Column(type="datetime", nullable=true)
+    * @ORM\Column(type="datetime", nullable=true)
     */
     protected $publishDate;
     
     /**
-    * @ORM\\ManyToOne(targetEntity="jhernandz\\BlogBundle\\Entity\\User", 
+    * @ORM\ManyToOne(targetEntity="jhernandz\BlogBundle\Entity\User",
     *   inversedBy="posts")
     */
     protected $author;
     
     /**
-    * @ORM\\Column(type="text")
+    * @ORM\Column(type="text")
     */
     protected $content;
     
     /**
-    * @ORM\\OneToMany(targetEntity="jhernandz\\BlogBundle\\Entity\\Comment", 
+    * @ORM\OneToMany(targetEntity="jhernandz\BlogBundle\Entity\Comment",
     *   mappedBy="post")
     */
     protected $comments;
@@ -154,46 +154,46 @@ class Post
 }
 {% endhighlight %}
 
-En este caso podemos ver como hemos añadido algunos atributos nuevos en las anotaciones como el *nullable* del campo publishDate para indicar que es un campo que puede ser nulo. Como hemos dicho antes en esta entidad vamos a mapear la relación entre usuario y post. La forma de definir este mapeado la vemos con la anotación *@ORM\\ManyToOne(targetEntity="jhernandz\\BlogBundle\\Entity\\User")* que vemos encima del atributo *author* en la que indicamos que este atributo se tiene que relacionar con la entidad usuario. Además esta entidad también define una relación de uno a muchos con la entidad *Comment* que crearemos a continuación al igual que hicimos con la entidad *User* y *Post*
+En este caso podemos ver como hemos añadido algunos atributos nuevos en las anotaciones como el *nullable* del campo publishDate para indicar que es un campo que puede ser nulo. Como hemos dicho antes en esta entidad vamos a mapear la relación entre usuario y post. La forma de definir este mapeado la vemos con la anotación *@ORM\ManyToOne(targetEntity="jhernandz\BlogBundle\Entity\User")* que vemos encima del atributo *author* en la que indicamos que este atributo se tiene que relacionar con la entidad usuario. Además esta entidad también define una relación de uno a muchos con la entidad *Comment* que crearemos a continuación al igual que hicimos con la entidad *User* y *Post*
 
 La última entidad que vamos a crear como he mencionado antes, se llamará *Comment*, así que crearemos de nuevo en el mismo directorio un fichero llamado *Coment.php* y su contenido será este:
 
 {% highlight php linenos startinline=true %}
 <?php
 
-namespace jhernandz\\BlogBundle\\Entity;
+namespace jhernandz\BlogBundle\Entity;
 
-use Doctrine\\ORM\\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\\Entity
+ * @ORM\Entity
  */
 class Comment
 {
     /**
-    * @ORM\\Id
-    * @ORM\\Column(type="integer")
-    * @ORM\\GeneratedValue
+    * @ORM\Id
+    * @ORM\Column(type="integer")
+    * @ORM\GeneratedValue
     */
     protected $id;
     
     /**
-    * @ORM\\Column(type="string", length=255)
+    * @ORM\Column(type="string", length=255)
     */
     protected $name;
     
     /**
-    * @ORM\\Column(type="datetime", nullable=true)
+    * @ORM\Column(type="datetime", nullable=true)
     */
     protected $date;
     
     /**
-    * @ORM\\Column(type="text")
+    * @ORM\Column(type="text")
     */
     protected $content;
     
     /**
-    * @ORM\\ManyToOne(targetEntity="jhernandz\\BlogBundle\\Entity\\Post", 
+    * @ORM\ManyToOne(targetEntity="jhernandz\BlogBundle\Entity\Post", 
     *   inversedBy="comments")
     */
     protected $post;
@@ -202,7 +202,7 @@ class Comment
 
 Con las anotaciones claras y las entidades definidas, nos damos cuenta que todos los atributos los hemos declarado como *protected* por lo tanto no son accesibles. Por ello necesitamos crear los métodos *getters* y *setters* para poder acceder a ellos. En vez de tener que crearlos manualmente, Symfony nos proporciona un comando que nos ayuda a crearlos automaticamente, para ello vamos a un terminal y tecleamos lo siguiente:
 
-    > php app/console generate:doctrine:entities jhernandz\\BlogBundle
+    > php app/console generate:doctrine:entities jhernandz\BlogBundle
 
 Este comando indica que se generen todas las entidades del bundle que le pasamos como segundo parámetro. Si ahora volvemos a ver de nuevo los fichero *User.php*, *Post.php* o *Comment.php* que hemos creado antes, veremos como se han añadido automáticamente todos los getters y setters necesarios.
 

@@ -113,7 +113,7 @@ class Posts extends AbstractFixture implements OrderedFixtureInterface
                 $post = new Post();
                     $post->setTitle("Noticia " . $i);
                     $post->setSlug("noticia-" . $i);
-                    $post->setPublishDate(new \\DateTime());
+                    $post->setPublishDate(new \DateTime());
                     $post->setAuthor($user);
 
                     $content = >>>EOF
@@ -167,7 +167,7 @@ class Comments extends AbstractFixture implements OrderedFixtureInterface
             for ($i = 1; $i <= $commentsNumbers; $i++) {
                 $comment = new Comment();
                 $comment->setName("Coment Usu " . $i);
-                $comment->setDate(new \\DateTime());
+                $comment->setDate(new \DateTime());
                 $comment->setPost($post);
 
                 $content = >>>EOF
@@ -306,9 +306,9 @@ Lo último que nos queda por hacer es actualizar la plantilla de la vista, ya qu
     {% raw %}{% for item in items %}{% endraw %}
         <article class="post">
             <header><h1><a href="#">{% raw %}{{ item.post.title }}{% endraw %}</a></h1></header>
-            {% raw %}{{ item.post.content \| raw }}{% endraw %}
+            {% raw %}{{ item.post.content | raw }}{% endraw %}
             <footer class="footer">
-                {% raw %}{{ item.post.publishDate \| date("d/m/Y") }} 
+                {% raw %}{{ item.post.publishDate | date("d/m/Y") }}
                     por {{ item.name }}{% endraw %}
                 <span class="pull-right">{% raw %}{{ item.comments }}{% endraw %} Comentarios</span>
             </footer>
