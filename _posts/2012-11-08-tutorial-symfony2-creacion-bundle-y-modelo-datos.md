@@ -11,7 +11,9 @@ Para comenzar hay que explicar que es un bundle. Una forma fácil de definirlo e
 
 Una vez explicado que es un bundle, toca crear uno para la aplicación. Para ello abrimos un terminal y vamos al directorio de trabajo donde instalamos Symfony. Una vez en el directorio *blog* tecleamos lo siguiente:
 
-    > php app/console generate:bundle
+``` none
+> php app/console generate:bundle
+```
 
 Este comando inicializará un asistente para crear un nuevo bundle. La primera pregunta que hace el asistente es para que le indiquemos el namespace del bundle. El namespace normalmente suele ser el nombre de la compañía que desarrolla el bundle, seguido opcionalmente de una categoría bajo la que queremos agruparlo y finalmente el nombre del bundle terminado con la palabra bundle. Yo le voy a poner como namespace lo siguiente **jhernandz/BlogBundle**. En este caso no he indicado ninguna categoría, solamente el nombre del desarrollador y el del bundle.
 
@@ -35,7 +37,7 @@ Con estos pasos finalizados, ya esta el bundle creado completamente. Como hemos 
 
 Para comenzar a crear el modelo de datos vamos a la siguiente ruta de nuestro bundle *src/jhernandz/BlogBundle/* y creamos una nueva carpeta a la que llamaremos *Entity*. Dentro de esta carpeta crearemos todas las entidades que necesitaremos para este bundle y comenzaremos con la entidad de usuario. Así que crearemos un nuevo fichero al que llamaremos **User.php** y contendrá lo siguiente:
 
-{% highlight php linenos startinline=true %}
+``` php
 <?php
 
 namespace jhernandz\BlogBundle\Entity;
@@ -86,7 +88,7 @@ class User
         return $this->name . ' ' . $this->lastName; 
     }
 }
-{% endhighlight %}
+```
 
 Como se puede ver, tanto encima de la declaración de la clase como en la declaración de cada atributo existen unos comentarios. A estos comentarios se le llaman anotaciones y sirven para identificar las propiedades y la entidad con la finalidad de que Doctrine procese los datos adecuadamente para relacionarse con la base de datos.
 
@@ -100,7 +102,7 @@ Antes de continuar hay que aclarar que para que las anotaciones funcionen correc
 
 Pasamos ahora a definir la entidad Post, creamos un nuevo fichero en la misma ruta donde se encuentra el fichero *User.php* y lo llamamos *Post.php*. En él pondremos el siguiente contenido:
 
-{% highlight php linenos startinline=true %}
+``` php
 <?php
 
 namespace jhernandz\BlogBundle\Entity;
@@ -152,13 +154,13 @@ class Post
     protected $comments;
 
 }
-{% endhighlight %}
+```
 
 En este caso podemos ver como hemos añadido algunos atributos nuevos en las anotaciones como el *nullable* del campo publishDate para indicar que es un campo que puede ser nulo. Como hemos dicho antes en esta entidad vamos a mapear la relación entre usuario y post. La forma de definir este mapeado la vemos con la anotación *@ORM\ManyToOne(targetEntity="jhernandz\BlogBundle\Entity\User")* que vemos encima del atributo *author* en la que indicamos que este atributo se tiene que relacionar con la entidad usuario. Además esta entidad también define una relación de uno a muchos con la entidad *Comment* que crearemos a continuación al igual que hicimos con la entidad *User* y *Post*
 
 La última entidad que vamos a crear como he mencionado antes, se llamará *Comment*, así que crearemos de nuevo en el mismo directorio un fichero llamado *Coment.php* y su contenido será este:
 
-{% highlight php linenos startinline=true %}
+``` php
 <?php
 
 namespace jhernandz\BlogBundle\Entity;
@@ -198,23 +200,29 @@ class Comment
     */
     protected $post;
 }
-{% endhighlight %}
+```
 
 Con las anotaciones claras y las entidades definidas, nos damos cuenta que todos los atributos los hemos declarado como *protected* por lo tanto no son accesibles. Por ello necesitamos crear los métodos *getters* y *setters* para poder acceder a ellos. En vez de tener que crearlos manualmente, Symfony nos proporciona un comando que nos ayuda a crearlos automaticamente, para ello vamos a un terminal y tecleamos lo siguiente:
 
-    > php app/console generate:doctrine:entities jhernandz\BlogBundle
+``` none
+> php app/console generate:doctrine:entities jhernandz\BlogBundle
+```
 
 Este comando indica que se generen todas las entidades del bundle que le pasamos como segundo parámetro. Si ahora volvemos a ver de nuevo los fichero *User.php*, *Post.php* o *Comment.php* que hemos creado antes, veremos como se han añadido automáticamente todos los getters y setters necesarios.
 
 Una vez tenemos las entities completas, crearemos nuestra base de datos, para ello desde un terminal escribimos lo siguiente:
 
-    > php app/console doctrine:database:create
+``` none
+> php app/console doctrine:database:create
+```
 
 Este comando se encargará de leyendo los datos que introducimos previamente al configurar la aplicación ([tutorial de instalación](/2012/10/25/tutorial-symfony2-instalacion.html)) crear la base de datos.
 
 A continuación y con la base de datos correctamente creada, es el turno de generar las tablas necesarias. Para este fín, Symfony pone a nuestra disposición el siguiente comando:
 
-    > php app/console doctrine:schema:create
+``` none
+> php app/console doctrine:schema:create
+```
 
 Este comando se encargará de leer las entidades que hemos creado anteriormente y definir todas las tablas con los atributos y las relaciones que indicamos al crear las entidades.
 

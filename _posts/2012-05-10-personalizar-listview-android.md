@@ -16,7 +16,7 @@ En ella podemos ver una imagen a la izquierda, un título en la parte central, u
 
 Lo primero que vamos a crear es un layout para organizar la disposición de todos estos elementos en la pantalla, así que creamos un nuevo fichero xml en la carpeta layout al que llamaremos *list_item_layout.xml* y en el que pondremos el siguiente código:
 
-{% highlight xml linenos %}
+``` xml
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
@@ -55,7 +55,7 @@ Lo primero que vamos a crear es un layout para organizar la disposición de todo
         android:src="@drawable/next" />
    
 </RelativeLayout>
-{% endhighlight %}
+```
 
 Como se puede ver hemos utilizado un **RelativeLayout** para organizar la información, gracias a este layout organizamos el resto de los componentes ajustándolos con él para dar el formato tal y como nos interesa. Para ello utilizamos las propiedades **layout_alignParantLeft**, **layout_centerInParent**, **layout_alignParentTop**, **layout_centerHorizontal**, **layout_alignParentRight** y **layout_below**. Aunque la función de cada una de estas propiedades está bastante clara por su nombre vamos a explicar que es lo que realizan:
 
@@ -67,7 +67,7 @@ Una vez aclarado estas propiedades, dentro del layout tenemos dos **ImageView** 
 
 Una vez tenemos el layout vamos a definir el modelo de datos, para ello crearemos una clase llamada *ItemCompra.java* y cuyo contenido será el siguiente:
 
-{% highlight java linenos %}
+``` java
 public class ItemCompra {
     protected long id;
     protected String rutaImagen;
@@ -126,13 +126,13 @@ public class ItemCompra {
         this.tipo = tipo;
     }
 }
-{% endhighlight %}
+```
 
 No creo que necesite explicación, simplemente es una clase que contendrá las variables necesarias para almacenar los elementos que más tarde queremos que aparezcan en el ListView. Estos elementos serán el identificador, el nombre, el tipo y la ruta de la imagen para poder mostrarla.
 
 Después de esto nos toca personalizar el adapter. Como sabrás, para rellenar un ListView tenemos que pasarle un elemento de tipo **Adapter** con los datos queremos que contenga el ListView. Normalmente para un ListView simple se utiliza la clase **ArrayAdapter**, pero como nuestro ListView va a ser personalizado tenemos que crear nuestro propio adapter. Para ello simplemente tenemos que crear una clase derivada de **BaseAdapter** y sobrescribir los métodos que contiene esta clase abstracta. Creamos un fichero que llamaremos *ItemCompraAdapter.java* y le añadimos el siguiente contenido:
 
-{% highlight java linenos %}
+``` java
 public class ItemCompraAdapter extends BaseAdapter {
     protected Activity activity;
     protected ArrayList<ItemCompra> items;
@@ -185,7 +185,7 @@ public class ItemCompraAdapter extends BaseAdapter {
         return vi;
     }
 }
-{% endhighlight %}
+```
 
 Esta clase contiene dos atributos: **activity** e **items**. Ambos son pasados al constructor para inicializar el adapter. El atributo activity es necesario para poder generar el layout que hemos creado anteriormente para nuestros item en el ListView, mientras que el ArrayList de items contiene los elementos que se mostrarán. A continuación se sobrescriben los métodos de la clase abstracta, **getCount** tiene que devolver la cantidad de items que contiene el adapter, esa cantidad la obtenemos desde el ArrayList que tenemos. El método **getItem** tiene que devolver el item que se encuentra en la posición que se pasa como parámetro, de nuevo gracias al ArrayList podemos obtener el item correcto sin ningún tipo de problema. El método que nos queda, **getView**, se encarga de mostrar los items dentro del ListView. Este método es algo más complejo así que creo que merece la pena explicarlo un poco.
 
@@ -193,7 +193,7 @@ Esta clase contiene dos atributos: **activity** e **items**. Ambos son pasados a
 
 Una vez terminado esto, el trabajo más difícil ha sido completado, nos queda configurar la pantalla principal de la aplicación para indicar que muestre un ListView. Para ello vamos al layout *main.xaml* y lo dejamos de la siguiente forma:
 
-{% highlight xml linenos %}
+``` xml
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
@@ -205,11 +205,11 @@ Una vez terminado esto, el trabajo más difícil ha sido completado, nos queda c
         android:layout_height="wrap_content"
         android:id="@+id/listView" />
 </LinearLayout>
-{% endhighlight %}
+```
 
 Para acabar con el ejemplo vamos al fichero de inicio de la aplicación *ListViewSampleActivity.java* y escribimos lo siguiente:
 
-{% highlight java linenos %}
+``` java
 class ListViewSampleActivity extends Activity {
     /** Called when the activity is first created. */
     @Override
@@ -239,7 +239,7 @@ class ListViewSampleActivity extends Activity {
         return items;
     }
 }
-{% endhighlight %}
+```
 
 La funcionalidad principal aquí es recuperar el ListView y obtener un ArrayList con los elementos, en este ejemplo se ha optado por crear los elementos de uno en uno, pero se pueden obtener desde una base de datos, desde un fichero o como queramos. A  continuación se crea el adapter y finalmente se le asigna el adapter al ListView. Con esto el resultado que obtenemos es el siguiente:
 

@@ -2,7 +2,6 @@
 layout: post
 comments: false
 title: Control Repeater ASP.NET
-date: 2010-09-25 15:00:00
 ---
 
 
@@ -19,18 +18,18 @@ Como podemos ver se trata de una base de datos muy sencilla que no requiere much
 
 Comencemos con el código ASP, lo primero que vamos a hacer es añadir un control **Repeater** y un control **SqlDataSource** a nuestra página, además los enlazaremos quedando el siguiente código:
 
-{% highlight csharp linenos %}
+``` csharp
 <asp:repeater ID="Repeater1" runat="server" 
     DataSourceID="SqlDataSourcePeliculas">
 </asp:repeater>
 
 <asp:SqlDataSource ID="SqlDataSourcePeliculas" runat="server">
 </asp:SqlDataSource>
-{% endhighlight %}   
+``` 
 
 A continuación configuramos el **SqlDataSource**, seleccionamos la base de datos que hemos creado anteriormente. Cuando nos pregunte que datos queremos recuperar, seleccionamos de la tabla *películas* el nombre y el año y continuamos hasta la finalización del asistente. El **Repeater** es un control que no se puede editar visualmente, así que los siguientes pasos los tendremos que hacer desde la edición de código. Dentro de las etiquetas del control escribimos lo siguiente:
 
-{% highlight csharp linenos %}
+``` csharp
 <asp:repeater ID="Repeater1" runat="server" 
     DataSourceID="SqlDataSourcePeliculas">
   <HeaderTemplate>
@@ -48,7 +47,7 @@ A continuación configuramos el **SqlDataSource**, seleccionamos la base de dato
     </ul>
   </FooterTemplate>
 </asp:repeater>
-{% endhighlight %}  
+```
 
 
 El código HTML o ASP que encerremos entre las etiquetas **&lt;HeaderTemplate&gt;&lt;/HeaderTemplate&gt;** se ejecutará una vez y renderizará en pantalla lo que contenga. En nuestro caso la etiqueta de apertura de una lista, estás etiquetas se suelen usar para poner una cabecera a los datos que vienen a continuación. Como se puede imaginar el código de las etiquetas **&lt;FooterTemplate&gt;&lt;/FooterTemplate&gt;** tendrán el mismo comportamiento que el **HeaderTemplate**, pero en esa ocasión se utilizará para el pie de los datos. En nuestro caso cerrar la lista. Por último nos queda la etiqueta **ItemTemplate**, lo que aparezca entre ella se renderizará una vez por cada elemento que contenga el resultado del DataSource que le hemos asociado.
@@ -62,7 +61,7 @@ El resultado que veremos por pantalla será el siguiente:
 
 Ahora vayamos un paso más lejos, supongamos que queremos organizar todas las películas que tenemos según su género. Lo que tendríamos que hacer es seleccionar todos los géneros y después todas las películas pertenecientes a ese género. La forma de hacerlo será usando un **Repeater** anidado dentro de otro. Pasemos a ver cómo nos queda el código en esta ocasión:
 
-{% highlight csharp linenos %}
+``` csharp
 <asp:repeater ID="RepeaterGeneros" runat="server" 
     DataSourceID="SqlDataSourceGeneros" 
   onitemdatabound="RepeaterGeneros_ItemDataBound">
@@ -92,12 +91,12 @@ Ahora vayamos un paso más lejos, supongamos que queremos organizar todas las pe
   ConnectionString="<%$ ConnectionStrings:ConnectionPeliculas %>" 
   SelectCommand="SELECT [id], [nombre] FROM [generos]">
 </asp:SqlDataSource>
-{% endhighlight %}  
+```
 
 
 Lo primero que ha cambiado ha sido la sentencia del **SqlDataSource**, en esta ocasión seleccionamos todos los tipos de géneros que hay en nuestra base de datos. El **Repeater** mas externo, RepeaterGeneros, no contiene ni **HeaderTemplate** ni **FooterTemplate**, únicamente existe un **ItemTemplate** en el cual recuperamos el nombre del género y lo mostramos. Posteriormente creamos otro **Repeater**, RepeaterPeliculas, dentro del **ItemTemplate** y en esta ocasión le ponemos como antes una cabecera, un pie y los ítems. Por último capturaremos el evento **onitemdatabound** del RepeaterGeneros que se lanzará cada vez que se añada un nuevo ítem, es decir, un nuevo género. Lo que haremos en este evento es lo siguiente:
 
-{% highlight csharp linenos %}
+``` csharp
 protected void RepeaterGeneros_ItemDataBound(
     object sender, RepeaterItemEventArgs e)
 {
@@ -128,7 +127,7 @@ protected void RepeaterGeneros_ItemDataBound(
     rp.DataBind();
   }
 }
-{% endhighlight %}  
+```
 
 
 Lo primero es comprobar que estamos tratando un ítem normal, lo que quiere decir que ni es la cabecera, ni el pie, ni otro tipo de ítem. Simplemente un ítem. Posteriormente obtenemos el id del genero actual, creamos un **SqlDataSource** y lo asociamos al RepeaterPeliculas. El resultado que obtenemos después de esto es el siguiente:
@@ -137,7 +136,7 @@ Lo primero es comprobar que estamos tratando un ítem normal, lo que quiere deci
 
 Esta bastante bien, pero aún podemos mejorarlo un poco. Si nos damos cuenta el género Terror no contiene ninguna película y supongamos que en el resultado, no queremos que me salgan géneros que no contienen películas. Para ello modificaríamos el evento **onitemdatabound** y lo dejaríamos de la siguiente forma:
 
-{% highlight csharp linenos %}
+``` csharp
 protected void RepeaterGeneros_ItemDataBound(
     object sender, RepeaterItemEventArgs e)
 {
@@ -172,7 +171,7 @@ protected void RepeaterGeneros_ItemDataBound(
       e.Item.Visible = false;
   }
 }
-{% endhighlight %}  
+```
 
 Hemos añadido una condición al final que comprueba si existen películas de ese género, en caso de no existir oculta el género y no se visualiza en el resultado final.
 

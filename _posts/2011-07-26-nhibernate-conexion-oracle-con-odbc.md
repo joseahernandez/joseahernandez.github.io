@@ -10,7 +10,7 @@ Comenzamos viendo como realizar la conexión. Lo primero que hay que crearse es 
 
 <!--more-->
 
-{% highlight csharp linenos %}
+``` csharp
 using NHibernate;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
@@ -32,7 +32,7 @@ public class OdbcConfiguration : PersistenceConfiguration<OdbcConfiguration,
     }
   }
 } 
-{% endhighlight %}
+```
 
 La clase extiende de **PersistenceConfiguration**, una clase que pertenece a FluentNHibernate, le pasamos como argumentos el nombre de la clase que estamos creando y el tipo de cadena de conexión que vamos a usar. En este caso el nombre de la clase **OdbcConfiguration** y el tipo de cadena de conexión **OdbcConnectionStringBuilder**.
 
@@ -42,7 +42,7 @@ Lo siguiente que hacemos es crear una propiedad estática que nos devolverá la 
 
 Una vez tenemos esta clase implementada, podemos implementar el método que nos creará la sesión para realizar nuestras operaciones con la base de datos.
 
-{% highlight csharp linenos %}
+``` csharp
 private static ISessionFactory CreateSessionFactory(string connectionString)
 {
   try
@@ -64,13 +64,13 @@ private static ISessionFactory CreateSessionFactory(string connectionString)
 
   return null;
 }
-{% endhighlight %}
+```
 
 Este método recibe la cadena de conexión y simplemente realiza la configuración para poder realizar la conexión correctamente. Como vemos en la línea 7 le indicamos en la configuración que la base de datos a utilizar, utiliza el dialecto de nuestra clase **OdbcConfiguration**. Simplemente con estos pasos conseguiremos realizar la conexión a Oracle mediante ODBC.
 
 Como he comentado al principio, hay algunas cosas que no me gustas de utilizar ODBC. Una de ellas y la que más dolores de cabeza me han dado ha sido crear un objeto, relacionarlo con otro y posteriormente insertar ambos en la base de datos. Un ejemplo sencillo podría ser el siguiente:
 
-{% highlight csharp linenos %}
+``` csharp
 using( ITransaction transaccion = session.BeginTransaction() )
 {
   try
@@ -96,7 +96,7 @@ using( ITransaction transaccion = session.BeginTransaction() )
   {
     session.Transaction.Rollback();
   }
-{% endhighlight %}
+```
 
 Este código con el conector de Oracle funciona sin problemas, pero ODBC no es capaz de recuperar la clave primera de la inserción del objeto Persona para luego asignarla al objeto Coche, con lo que se produce un error.
 

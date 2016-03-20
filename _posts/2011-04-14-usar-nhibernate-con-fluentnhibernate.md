@@ -25,7 +25,7 @@ La base de datos con la que trabajaremos tendrá la siguiente estructura:
 En Visual Studio hacemos clic derecho encima del proyecto y añadimos una nueva carpeta que llamaremos **Modelo**. Dentro de esta carpeta crearemos dos más, una de ellas la llamaremos **Mappings** y la otra **Entities**. Ahora nos ponemos encima de la carpeta **Modelo** y añadimos una nueva clase que llamaremos **SessionNHibernate**. Esta clase será la encargada de abrirnos una sesión con la base de datos para poder consultar, insertar, editar y borrar los datos. Su contenido es el siguiente:
 
 
-{% highlight csharp linenos %}
+``` csharp
 using System;
 using NHibernate;
 using FluentNHibernate.Cfg;
@@ -93,7 +93,7 @@ namespace EjemploNHibernate.Modelo
     }
   }
 }
-{% endhighlight %}
+```
 
 Incluimos tres directivas using para poder utilizar tanto la librería NHibernate como FluentNHibernate, posteriormente creamos la clase que contendrá dos atributos estáticos. Uno de ellos será del tipo **ISessionFactory** y será el encargado de establecer la conexión con la base de datos. El otro atributo será de tipo **ISession** y se encargará de realizar las consultas contra la base de datos. Los métodos que usaremos serán **OpenSession** y **CloseSession** que serán los encargados de abrirnos una sesión para que podamos trabajar contra la base de datos. Otro método que también tenemos que tener en cuenta es **CreateSessionFactory** ya que es en este método donde le indicamos la cadena de conexión que tiene que usar para realizar la conexión.
 
@@ -101,7 +101,7 @@ Incluimos tres directivas using para poder utilizar tanto la librería NHibernat
 Ahora crearemos las clases que usaremos para trabajar con ellas como si fueran la base de datos. Estas clases tendrán una propiedad virtual por cada campo de la base de datos que vayamos a mapear y le podremos poner los métodos que nos interesen. De momento vamos a crear la estructura básica de cada objeto y posteriormente iremos añadiéndole nuevos métodos conforme los necesitemos. Vamos a la carpeta **Entities** y añadimos una nueva clase que llamaremos **Empresa**:
 
 
-{% highlight csharp linenos %}
+``` csharp
 using System.Collections.Generic;
 
 using NHibernate;
@@ -126,11 +126,11 @@ namespace EjemploNHibernate.Modelo.Entities
     }
   }
 }
-{% endhighlight %}
+```
 
 Creamos otra nueva clase dentro de la misma carpeta llamada **Municipio**:
 
-{% highlight csharp linenos %}
+``` csharp
 using System.Collections.Generic;
 
 using NHibernate;
@@ -148,11 +148,11 @@ namespace EjemploNHibernate.Modelo.Entities
     }
   }
 }
-{% endhighlight %}
+```
 
 Volvemos a hacer la misma operación y añadimos la clase **Establecimiento**:
 
-{% highlight csharp linenos %}
+``` csharp
 using System.Collections.Generic;
 using System.ComponentModel;
 using NHibernate;
@@ -175,11 +175,11 @@ namespace EjemploNHibernate.Modelo.Entities
     }
   }
 }
-{% endhighlight %}
+```
 
 Una vez que tenemos estas clases, ahora crearemos los mappings que usará FluentNHibernate para realizar el mapeo automáticamente. También tendremos que crear una clase para cada una de las tablas, así que vamos a la carpeta **Mappings** y agregamos una nueva clase que llamaremos **EmpresaMap** con el siguiente código:
 
-{% highlight csharp linenos %}
+``` csharp
 using FluentNHibernate.Mapping;
 
 using EjemploNHibernate.Modelo.Entities;
@@ -203,7 +203,7 @@ namespace EjemploNHibernate.Modelo.Mappings
     }
   }
 }
-{% endhighlight %}
+```
 
 Esta clase heredará de la clase ClassMap indicándole como plantilla la clase de la entidad que vamos a mapear. En su constructor lo primero que hacemos es indicar con el método *Table* el nombre de la tabla. Si no llamamos a este método, por defecto toma el nombre de la tabla en la base de datos igual que el de la clase que estamos mapeando, en este caso empresa. Pero como en nuestra base de datos la tabla se llama empresas llamamos a este método para indicarlo. Seguidamente llamamos al método *Id* pasándole como argumento la propiedad que en la entidad equivale al id de la tabla. A continuación para el resto de campos utilizamos el método *Map* a excepción de la clave ajena que tenemos, la cual la pasaremos como parámetro al método *References*. El método *Column* que vemos, se encarga de indicar como se llama la columna en la base de datos, al igual que ocurre con el nombre de la tabla por defecto se toma el mismo nombre que la propiedad que estemos mapeando, pero si le hemos cambiado el nombre, con el método *Column* podemos indicar como se llama la columna en la base de datos. El último método que vemos es *HasMany* que indica que la propiedad Establecimientos tiene una relación a muchos con Establecimiento. Además mediante el método *KeyColumn* le indicamos cual es la columna que contiene la clave ajena en establecimiento.
 
@@ -211,7 +211,7 @@ Esta clase heredará de la clase ClassMap indicándole como plantilla la clase d
 Volvemos a añadir una nueva clase en la carpeta **Mappings** llamada **MunicipioMap**:
 
 
-{% highlight csharp linenos %}
+``` csharp
 using FluentNHibernate.Mapping;
 
 using EjemploNHibernate.Modelo.Entities;
@@ -228,11 +228,11 @@ namespace EjemploNHibernate.Modelo.Mappings
     }
   }
 }
-{% endhighlight %}
+```
 
 Seguimos con la clase que nos falta **EstablecimientoMap**:
 
-{% highlight csharp linenos %}
+``` csharp
 using FluentNHibernate.Mapping;
 using EjemploNHibernate.Modelo.Entities;
 
@@ -255,7 +255,7 @@ namespace EjemploNHibernate.Modelo.Mappings
     }
   }
 }
-{% endhighlight %}
+```
 
 En este último elemento que mapeamos utilizamos una nueva propiedad llamada *GeneratedBy* con esto le estamos indicando a NHibernate que cuando genere un nuevo establecimiento para el id tiene que utilizar la secuencia indicada. Esto lo tendríamos que haber realizado también para el resto de elementos, pero como en este ejemplo solo permitiremos insertar establecimientos me he ahorrado esos pasos.
 
@@ -267,20 +267,20 @@ Comencemos por el WebForm de listar las empresas, su resultado final será como 
 
 Como vemos es una pantalla simple, tenemos una lista de empresas y debajo de cada empresa tenemos el listado de los establecimientos que pertenecen a esa empresa. Para realizar esto vamos a ir a la clase **Empresa** y vamos a crearnos un método estático que nos devuelva todas las empresas.
 
-{% highlight csharp linenos %}
+``` csharp
 //Modelo/Entities/Empresa.cs
 public static List<Empresa> GetAllEmpresas()
 {
   return (SessionNHibernate.Session.CreateCriteria<Empresa>().AddOrder(
       Order.Asc("Nombre")).List<Empresa>() as List<Empresa>);
 }
-{% endhighlight %}
+```
 
 Vamos a explicar con detalle lo que hemos hecho en este método. Comenzamos llamando a la clase *SessionNHibernate* que nos hemos creado anteriormente y obtenemos el atributo *ISession* mediante la propiedad que creamos. A continuación llamamos al método *CreateCriteria<Empresa>* que pertenece a NHibernate y nos va a permitir realizar un criterio para buscar en la base de datos. A este método tenemos que indicarle la entidad sobre la que vamos a crear el criterio, en este caso Empresa. Cuando ya tenemos el criterio le indicamos que nos ordene el resultado por la columna *Nombre* llamando al método *AddOrder* sobre el objeto criteria. Por último le decimos que queremos obtener un *List<Empresa>*. Con todo esto, el resultado de la llamada a este método es una lista con todas las empresas que hay en la base de datos ordenadas por su nombre.
 
 Ahora que ya sabemos como obtenemos todas las empresas vamos al fichero Default.aspx.cs y modificamos su método *Page_Load* para dejarlo así:
 
-{% highlight csharp linenos %}
+``` csharp
 //... código creado automáticamente
 
 using NHibernate;
@@ -338,7 +338,7 @@ protected void Page_Load(object sender, EventArgs e)
 
   SessionNHibernate.CloseSession();
 }
-{% endhighlight %}
+```
 
 En lo primero que hay que fijarse es en los using incluidos para poder hacer uso tanto de las entidades que hemos creado anteriormente como de NHibernate. Después en el método lo primero que hacemos es llamar a *SessionNHibernate.OpenSession*, llamamos a la clase que nos creamos y abrimos la sesión para poder consultar los datos. A continuación con un foreach recorremos todas las empresas que nos devuelve el método *GetAllEmpresas* que creamos antes. Las siguientes líneas son la creación de controles dinámicos y rellenarlos con las propiedades del objeto empresa que estamos tratando en cada iteración. Como vemos mediante el atributo **Establecimientos** del objeto **Empresa** obtenemos todos los establecimientos para esa empresa y los podemos recorrer sin ninguna dificultad. Para finalizar añadimos los controles en los paneles creados y cerramos la sesión llamando al método *SessionNHibernate.CloseSession()*
 
@@ -348,18 +348,18 @@ Veamos ahora la pantalla para insertar un nuevo establecimiento:
 
 Como se ve, es un formulario simple que solicita los datos para crear un nuevo establecimiento. Lo primero que necesitamos para insertar un nuevo establecimiento es poder seleccionar a que empresa pertenece y en que municipio se encuentra. El método que obtiene todas las empresas ya lo hemos creado anteriormente, así que ahora vamos a crear un método que nos devuelva todos los municipios disponibles. Para ello vamos a la clase **Municipio** y creamos el método *GetAllMunicipios*.
 
-{% highlight csharp linenos %}
+``` csharp
 //Modelo/Entities/Municipio.cs
 public static List<Municipio> GetAllMunicipios()
 {
   return (SessionNHibernate.Session.CreateCriteria<Municipio>().AddOrder(
       Order.Asc("Nombre")).List<Municipio>() as List<Municipio>);
 }
-{% endhighlight %}
+```
 
 Una vez que tenemos este método podemos cargar los DropDownList de la pantalla de insertar establecimientos desde el método *Page_Load*.
 
-{% highlight csharp linenos %}
+``` csharp
 //Default.aspx.cs
 
 //... código creado automáticamente
@@ -384,33 +384,33 @@ protected void Page_Load(object sender, EventArgs e)
 
   SessionNHibernate.CloseSession();
 }
-{% endhighlight %}
+```
 
 Su funcionalidad es sencilla, abre la sesión y con un foreach recorre todas las empresas y las va añadiendo al DropDownList de empresas, posteriormente realiza la misma función con los municipios. Antes de ponernos a ver que realiza el botón *Aceptar* para guardar el establecimiento en la base de datos vamos a crear dos métodos nuevos en las clases **Empresa** y **Municipio** que usaremos a continuación.
 
-{% highlight csharp linenos %}
+``` csharp
 //Modelo/Entities/Empresa.cs
 
 public static Empresa Get(long id)
 {
   return SessionNHibernate.Session.Get<Empresa>(id);
 }
-{% endhighlight %}
+```
 
 El método *Get* de la clase **Empresa** simplemente recibe el id de una empresa y luego utilizando el atributo *Session* de la clase **SessionNHibernate** que creamos anteriormente, llama a su método *Get* pasándole como plantilla la entidad actual, en este caso empresa. Automáticamente se buscará en la base de datos la empresa que contenga ese id y se devolverá.
 
-{% highlight csharp linenos %}
+``` csharp
 //Modelo/Entitites/Municipio.cs
 
 public static Municipio Get(long id)
 {
   return SessionNHibernate.Session.Get<Municipio>(id);
 }
-{% endhighlight %}
+```
 
 Para los municipios tenemos un método igual que el anterior que usaremos de la misma manera. Ahora podemos ver el método que se ejecuta cuando pulsamos en el botón *Aceptar* en la pantalla de insertar establecimiento.
 
-{% highlight csharp linenos %}
+``` csharp
 //Default.aspx.cs
 
 protected void ButtonAceptar_Click(object sender, EventArgs e)
@@ -466,7 +466,7 @@ protected void ButtonAceptar_Click(object sender, EventArgs e)
     LabelError.Visible = true;
   }
 }
-{% endhighlight %}
+```
 
 Lo primero que comprobamos es que se haya seleccionado un campo tanto en el DropDownList de empresas como en el de municipios. Posteriormente abrimos la sesión llamando al método *SessionNHibernate.OpenSession* y nos guardamos el objeto que devuelve para usarlo más tarde. Nos creamos un nuevo objeto **Establecimiento** y rellenamos sus datos con la información que se ha insertado en los TextBox así como por los métodos *Get* de las clases **Empresa** y **Municipio**. Seguidamente llamamos al método *s.SaveOrUpdate* utilizando el valor de la sesión que nos guardamos antes y hacemos que este nuevo establecimiento quede almacenado en memoria. Para guardar el establecimiento de forma permanente, llamamos al método *s.Flush* y se añadirá la tupla correspondiente en la base de datos. El resto del código sirve para mostrar los mensajes de información al usuario tanto en el caso de éxito como en el de error a la hora de guardar y para cerrar la sesión.
 
@@ -476,7 +476,7 @@ Una vez que hemos visto como guardar un nuevo elemento en la base de datos vamos
 
 Es un formulario igual al de insertar, pero este consta de un control HiddenField para almacenar el id del establecimiento que estamos editando. El código desde el cual recuperamos los datos del establecimiento se ejecuta en el método *Page_Load* de la página editar y es el siguiente:
 
-{% highlight csharp linenos %}
+``` csharp
 //Editar.aspx.cs
 
 protected void Page_Load(object sender, EventArgs e)
@@ -515,13 +515,13 @@ protected void Page_Load(object sender, EventArgs e)
 
   SessionNHibernate.CloseSession();
 }
-{% endhighlight %}
+```
 
 Lo primero que hacemos es mirar que se ha recibido por get un id de un establecimiento, si no se ha recibido o es otra cosa que no se puede parsear a long, se redirecciona de nuevo a la página de listar. Si hasta aquí todo es correcto, abrimos una sesión y recuperamos el establecimiento utilizando el método *Get* de la clase **Establecimiento** pasándole el id. Posteriormente rellenamos los DropDownList de empresas y municipios con todas las opciones disponibles, además, seleccionamos los valores actuales para el establecimiento. Establecemos en los TextBox el texto de cada propiedad y guardamos el id del establecimiento en el campo hidden. Para finalizar cerramos la sesión.
 
 Nos queda ver las acciones que realizan los botones Cancelar y Actualizar. El botón Cancelar simplemente redirige a la pantalla de listado de empresas, mientras que el botón actualizar es el que se encarga de almacenar los cambios en la base de datos. El código para ambos botones es el siguiente:
 
-{% highlight csharp linenos %}
+``` csharp
 //Editar.aspx.cs
 
 protected void ButtonActualizar_Click(object sender, EventArgs e)
@@ -592,13 +592,13 @@ protected void ButtonCancelar_Click(object sender, EventArgs e)
 {
   Response.Redirect("Default.aspx");
 }
-{% endhighlight %}
+```
 
 Como se puede ver el código es idéntico al de insertar un nuevo establecimiento, la única diferencia es que en vez de crear un objeto **Establecimiento** nuevo, lo recuperamos de la base de datos con el id que tenemos en el campo hidden y después actualizamos todos sus datos. El método *SaveOrUpdate*, que hemos llamado tanto en la inserción como ahora en la edición, es el que se encarga de saber si es un objeto nuevo o estamos modificando uno ya existente para realizar el insert o el update contra la base de datos según corresponda. Al igual que antes el método *Flush* es importante que lo llamemos para hacer persistente los cambios en la base de datos.
 
 Para finalizar nos queda ver como eliminar un establecimiento. En la pantalla de listados también creamos un enlace para cada establecimiento hacia Eliminar.aspx pasándole el id del establecimiento. Esta pantalla simplemente borrara el establecimiento indicado y muestra un mensaje con el resultado permitiendo volver de nuevo al listado de empresas. El código donde realizamos el borrado está en el método *Page_Load* y es el siguiente:
 
-{% highlight csharp linenos %}
+``` csharp
 //Eliminar.aspx.cs
 
 protected void Page_Load(object sender, EventArgs e)
@@ -634,7 +634,7 @@ protected void Page_Load(object sender, EventArgs e)
   }
 
 }
-{% endhighlight %}
+```
 
 Como se ve el código es el mismo que usamos para editar con la única diferencia que esta vez usamos el método *Delete* para eliminar el objeto de la base de datos.
 

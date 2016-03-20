@@ -10,7 +10,7 @@ Lo primero que tendríamos que tener es un servicio que escuchara la petición y
 
 <!--more-->
 
-{% highlight php linenos %}
+``` php
 <?php
 
 try
@@ -32,13 +32,13 @@ catch(PDOException $e)
 {
     die('Error');
 }
-{% endhighlight %}
+```
 
 La funcionalidad que tiene es bastante sencilla, primero nos aseguramos que recibimos mediante petición POST los parámetros *name* y *photo*. A continuación, utilizando [PDO](/2012/07/01/consultas-base-datos-pdo.html) abrimos una conexión a la base de datos y realizamos la inserción de la imagen llamando previamente a la función [base64_decode](http://php.net/manual/es/function.base64-decode.php) para descodificar la información de la imagen que hemos recibido.
 
 Una vez que hemos llegado a este punto, nos falta la aplicación Android. Para hacer mas sencillo el ejemplo, supongamos que en la carpeta *res/drawable* de nuestra aplicación tenemos una imagen llamada *berlin.jpg* y queremos que sea esta imagen la que se envíe. Para realizar esta función, pondremos un botón en nuestra aplicación y cuando se pulse se ejecutará el siguiente código:
 
-{% highlight java linenos %}
+``` java
 HttpClient httpclient = new DefaultHttpClient();
 // URL del servicio que almacenara la imagen
 HttpPost httppost = new HttpPost("http://192.168.0.2/cities/upload.php");
@@ -63,7 +63,7 @@ httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 // Ejecutamos la petición
 HttpResponse response = httpclient.execute(httppost);
-{% endhighlight %}
+```
 
 Con estos pasos ya podemos almacenar una imagen desde nuestro dispositivo Android en una base de datos MySQL.
 

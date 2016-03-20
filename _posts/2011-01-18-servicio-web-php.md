@@ -14,7 +14,7 @@ Para comenzar vamos a crear una base de datos en MySQL para realizar las pruebas
 
 Una vez tenemos la base de datos lista, crearemos una clase que implementará los métodos que vamos a ofrecer como servicios web. Esta clase la guardaremos en un fichero llamado *GestionAutomoviles.class.php* y contendrá el siguiente código:
 
-{% highlight php linenos %}
+``` php
 <?php
 class GestionAutomoviles {
     public function ObtenerMarcas() {    
@@ -60,14 +60,14 @@ class GestionAutomoviles {
         return $modelos;  
     }
 }
-{% endhighlight %}
+```
     
 Como se puede ver, hay dos funciones a las que el servicio permitirá invocar. La primera de ellas *ObtenerMarcas* obtendrá todas las marcas de coches que tengamos en nuestra base de datos. La segunda función *ObtenerModelos* devolverá todos los modelos disponibles del identificador de la marca pasada como argumento. El código de las funciones creo que no merece la pena comentarlo ya que es muy básico.
 
 Una vez que tenemos esta clase creada, nos queda hacer que el servicio atienda las peticiones y de las respuestas apropiadas. Para ello crearemos un nuevo fichero al que llamaremos *webservice.php*. En él pondremos el siguiente código:
 
 
-{% highlight php linenos %}
+``` php
 <?php   
 include 'GestionAutomoviles.class.php';
 
@@ -75,15 +75,14 @@ $soap = new SoapServer(null, array('uri' => 'http://localhost/'));
 $soap->setClass('GestionAutomoviles');   
 $soap->handle();
 ?>
-{% endhighlight %}
+```
    
    
 Incluiremos la clase creada anteriormente, después nos crearemos un objeto del tipo [SoapServer](http://www.php.net/manual/es/class.soapserver.php). El primer parámetro lo ponemos a *null* porque como he mencionado antes no vamos a usar ningún fichero WSDL, el segundo parámetro es un array con distintas opciones de las cuales, al no tener fichero WSDL, la única que es obligatoria es la uri. Posteriormente con el método **setClass** indicamos cual es la clase que contendrá los métodos que va a ofrecer el servicio y por último con el método **handle** se procesan las peticiones SOAP que lleguen.
 
 En este momento nos queda ver como podemos consumir este servicio. Para ello vamos a crearnos un nuevo fichero al que llamaremos *cliente.php*. En él pondremos el siguiente código:
 
-{% highlight php linenos %}
-
+``` php
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -124,19 +123,20 @@ En este momento nos queda ver como podemos consumir este servicio. Para ello vam
     </ul>
 </body>
 </html>
-{% endhighlight %} 
+``` 
 
 Si quitamos todo el código html usado para presentar la salida, las lineas que nos interesan son la 10, 16 y 26. En ellas creamos un objeto del tipo [SoapClient](http://www.php.net/manual/es/class.soapclient.php). Al igual que hemos hecho con el servicio, el primer parametro es *null* porque no usamos ningún fichero WSDL, en el array de opciones tenemos que poner de nuevo la uri y la url (location) de donde esta escuchando el servicio. Una vez realizado esto ya podemos llamar a los métodos como se muestra posteriormente.
 
 Si hubiésemos usado ficheros WSDL la creación y utilización del servicio sería igual, lo único que tendríamos que cambiar es la llamada a los constructores  de *SoapClient* y *SoapServer* que sería de la siguiente forma:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 // El servidor lo creariamos asi
 $soap = new SoapServer('rutal/al/fichero.wsdl');
 
 // El cliente seria asi
 $client = new SoapClient('ruta/al/fichero.wsdl');
-{% endhighlight %}
+```
 
 La *ruta/al/fichero.wsdl* puede apuntar tanto a un fichero local como a una url.
 

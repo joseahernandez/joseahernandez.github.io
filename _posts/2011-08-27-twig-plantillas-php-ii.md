@@ -6,7 +6,7 @@ title: Twig, plantillas para PHP (II)
 
 En la entrada anterior hablé un poco sobre Twig y PHP, ahora toca concluir la entrada finalizando el proyecto de ejemplo que comenzamos a realizar. Comenzaremos modificando los ficheros que creamos para cada marca de teléfono y lo dejaremos de la siguiente forma:
 
-{% highlight php linenos %}
+``` php
 <?php
     require_once 'Twig/Autoloader.php';
     Twig_Autoloader::register();
@@ -39,7 +39,7 @@ En la entrada anterior hablé un poco sobre Twig y PHP, ahora toca concluir la e
      );
 
     echo $template->render(array('marca' => $marca, 'moviles' => $moviles));
-{% endhighlight %}
+```
 
 Como observamos las primeras líneas son idénticas a lo que teníamos hasta ahora. A partir de la line 12 es donde comenzamos a ver las cosas nuevas. En concreto tenemos la variable **$marca** que contiene el nombre de la marca y la variable **$moviles** que es un array que contiene arrays con el nombre del modelo de teléfono y una imagen de este. Estos datos los podríamos haber obtenido de cualquier fuente de datos, una base de datos, un fichero, un servicio web. Pero para clarificar el ejemplo he decidido hacerlo así. La &uacute;ltima line que vemos es la llamada al método **render** en ella, en esta ocasión en vez de pasarle un array vacío pasamos un array asociativo indicando un nombre y la variable que queremos que contenga. El nombre en el array asociativo es muy importante, ya que, posteriormente desde twig para acceder a las variables tendremos que usar el nombre que hemos indicado en el array asociativo.
 
@@ -49,7 +49,7 @@ El resto de ficheros de cada marca de teléfono contiene lo mismo pero cambiando
 
 Ahora es el turno de trabajar un poco sobre la plantilla **stock.twig.html** y de ver nuevos elementos que nos proporciona Twig. Vamos a dejar la plantilla de la siguiente forma:
 
-{% highlight html linennos %}
+``` html
 {% raw %}{% extends "layout.twig.html" %}{% endraw %}
 
 {% raw %}{% block title %}{{ marca }} | {{ parent() }} {% endblock %}{% endraw %}
@@ -71,7 +71,7 @@ Ahora es el turno de trabajar un poco sobre la plantilla **stock.twig.html** y d
   {% raw %}{% endfor %}{% endraw %}
  </ul>
 {% raw %}{% endblock %}{% endraw %}
-{% endhighlight %}
+```
 
 El código anterior es similar al que vimos en la entrada anterior, pero hemos a&ntilde;adido nuevas características. En el bloque **title** hemos a&ntilde;adido lo siguiente: **{% raw %}{{ marca }}{% endraw %}**, el uso de las doble llaves ({% raw %}{{ }}{% endraw %}) indica a Twig que lo que hay entre ellas es una variable que se le ha pasado a la plantilla. Esta variable es la que pasamos con el método **render** y cuyo nombre **marca** indicamos en el array asociativo.
 
@@ -90,7 +90,7 @@ Hay que indicar que para que esto funcione correctamente tenemos que tener en nu
 
 Si recordamos la entrada anterior, indiqué que había generado un fichero para cada marca para poder ver como desde varias páginas podríamos reutilizar la misma plantilla. Ahora lo que voy a hacer es reorganizar mejor el ejemplo y dejarlo todo más compacto. Para comenzar modificaremos la plantilla **layout.twig.html** y donde teníamos el men&uacute; vamos a sustituir los enlaces por lo siguiente:
 
-{% highlight html linennos %}
+``` html
 <div class="menu">
     <ul>
         <li><a href="index.php">Inicio</a></li>
@@ -100,11 +100,11 @@ Si recordamos la entrada anterior, indiqué que había generado un fichero para 
         <li><a href="marcas.php?marca=alcatel">Alcatel</a></li>
     </ul>
 </div>
-{% endhighlight %}
+```
 
 Seguidamente creamos un nuevo fichero que llamaremos **marcas.php** y en el ponemos lo siguiente:
 
-{% highlight php linennos %}
+``` php
 <?php
     require_once 'Twig/Autoloader.php';
     Twig_Autoloader::register();
@@ -200,7 +200,7 @@ Seguidamente creamos un nuevo fichero que llamaremos **marcas.php** y en el pone
     }
     else
         header('Location: index.php');
-{% endhighlight %}
+```
 
 Tenemos todos los datos almacenados en un array y hacemos que por un parámetro GET nos pasen la marca. Si existe ese parámetro cuando se llama a la página **marcas.php** y además el array que contiene los datos tiene esa clave se llama a la función **render** pasándole el array de datos y la marca. En cualquier otro caso realizamos una redirección a la página de inicio.
 

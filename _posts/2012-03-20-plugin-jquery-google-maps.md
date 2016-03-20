@@ -11,7 +11,7 @@ Para comenzar a trabajar con este plugin, simplemente tenemos que cargar en nues
 
 <!--more-->
 
-{% highlight html linenos %}
+``` html
 <!DOCTYPE html>
   <head>
     <title>Mapa</title>
@@ -32,7 +32,7 @@ Para comenzar a trabajar con este plugin, simplemente tenemos que cargar en nues
     </script>
   </body>
 </html>
-{% endhighlight %}
+```
 
 ![Mapa Valencia](/uploads/posts/images/gMap-sample1.png)
 
@@ -40,7 +40,7 @@ Para comenzar a trabajar con este plugin, simplemente tenemos que cargar en nues
 
 Pero este plugin no se queda únicamente aquí, supongamos que queremos indicar mediante un marcador la localización de la estación del Norte (estación de trenes de Valencia). Para ello simplemente tendremos que mantener el mismo código mostrado anteriormente, actualizando únicamente el código de la llamada al plugin gMaps por este otro:
 
-{% highlight javascript linenos %}
+``` javascript
 $(document).ready(function() {
     $('#map').gMap({ 
         markers: [
@@ -49,13 +49,13 @@ $(document).ready(function() {
         zoom: 16 
       });
   });
-{% endhighlight %}
+```
 
 ![Mapa estación Norte Valencia](/uploads/posts/images/gMap-sample2.png)
 
 En un mapa podemos poner tantos marcadores como queramos, para hacerlo simplemente tenemos que pasarle una lista con la longitud y latitud de todos los marcadores. En el siguiente ejemplo podemos ver tres estaciones de trenes que se encuentran en la ciudad de Valencia.
 
-{% highlight java linenos %}
+``` javascript
 $(document).ready(function() {
     $('#map').gMap({ 
         markers: [
@@ -66,13 +66,13 @@ $(document).ready(function() {
        zoom: 13 
    });
 });
-{% endhighlight %}
+```
 
 ![Mapa estaciones tren Valencia](/uploads/posts/images/gMap-sample3.png)
 
 La sencillez con la que podemos realizar cualquier tipo de acción en Google Maps con este plugin es increíble, para finalizar vamos a ver como podemos personalizar el icono de marcador por uno propio, haremos que aparezca un popup con información cuando se pulse sobre él y cambiaremos el tipo de mapa a mostrar. El código para realizar esto es el siguiente:
 
-{% highlight java linenos %}
+``` javascript
 $(document).ready(function() {
     $('#map').gMap({ 
         markers: [
@@ -97,7 +97,7 @@ $(document).ready(function() {
         maptype: google.maps.MapTypeId.SATELLITE
     });
 });
-{% endhighlight %}
+```
 
 ![Estaciones trenes con marcadores personalizados](/uploads/posts/images/gMap-sample4.png)
 

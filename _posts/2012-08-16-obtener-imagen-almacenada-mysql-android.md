@@ -14,7 +14,7 @@ El servicio web que crearemos para recuperar la información de esta base de dat
 
 <!--more-->
 
-{% highlight php linenos %}
+``` php
 <?php  
 
 $con = mysql_connect('localhost', 'root', '');  
@@ -42,11 +42,11 @@ if( $con )
 
 header('Content-type: application/json');
 echo json_encode($cities);
-{% endhighlight %}
+```
 
 El servicio nos devolverá en formato json el identificador, el nombre y la imagen codificada en base64 de todas las ciudades de nuestra base de datos. Con el servicio web finalizado a continuación pasamos a la aplicación Android. Lo primero que vamos a crear es el layout para el ListView el cual tendrá un ImageView donde se alojará la imagen de la ciudad y un TextView donde se mostrará su nombre. Para el layout crearemos un fichero en la carpeta *layout* al que llamaremos **list_item_layout.xml** y su contenido será el siguiente:
 
-{% highlight xml linenos %}
+``` xml
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
@@ -69,11 +69,11 @@ El servicio nos devolverá en formato json el identificador, el nombre y la imag
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
 </RelativeLayout>
-{% endhighlight %}
+```
 
 Con este layout definido, vamos ahora con el layout principal de la aplicación. Este otro layout únicamente contendrá un ListView donde se mostrarán los datos, también lo situaremos en la carpeta *layout*, su nombre será **main.xml** y su contenido será el siguiente:
 
-{% highlight xml linenos %}
+``` xml
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
@@ -87,11 +87,11 @@ Con este layout definido, vamos ahora con el layout principal de la aplicación.
     </ListView>
     
 </LinearLayout>
-{% endhighlight %}
+```
 
 Una vez finalizados los layouts de nuestra aplicación, vamos a pasar ahora a implementar el modelo. En este caso el modelo solo tendrá una clase a la que llamaremos **City** y su contenido será el siguiente:
 
-{% highlight java linenos %}
+``` java
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -143,14 +143,14 @@ public class City {
         return photo;
     }
 }
-{% endhighlight %}
+```
 
 Como vemos, nuestra clase City contiene atributos para almacenar su id, nombre y su imagen. Para almacenar la imagen se utiliza el atributo *data* que recuperará la imagen en base64 del webservice, posteriormente se decodificaran esos datos y se convertirán en un Bitmap que se almacenará en el atributo *photo*. Ese atributo *photo* será el usado para aplicarlo al ImageView. Además de los atributos, hemos incluido los métodos geters y setter, el único que tiene algo especial es el método **setData** que además de asignar el valor a su variable, la decodificará, creará el Bitmap y lo asignará al atributo *photo*.
 
 El siguiente paso es crear la clase que usaremos como adapter para nuestro ListView, a esta clase la llamaremos **CityAdapter** y su contenido será el siguiente:
 
 
-{% highlight java linenos %}
+``` java
 public class CityAdapter extends BaseAdapter {
     protected Activity activity;
     protected ArrayList<City> items;
@@ -196,11 +196,11 @@ public class CityAdapter extends BaseAdapter {
         return vi;
     }
 }
-{% endhighlight %}
+```
 
 Ahora completaremos el código del método *onCreate* del Activity para que todo se ejecute correctamente:
 
-{% highlight java linenos %}
+``` java
 public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main);
@@ -251,13 +251,13 @@ public void onCreate(Bundle savedInstanceState) {
     CityAdapter cityAdapter = new CityAdapter(this, citiesAvaiable);
     lvCities.setAdapter(cityAdapter);
 }
-{% endhighlight %}
+```
 
 Una cosa que hay que tener en cuenta cuando estamos desarrollando y tenemos en la misma máquina el servidor web y el emulador de Android, es que para  llamar al servicio web tenemos que usar la IP de la maquina en la que estamos trabajando. En el ejemplo yo he usado la IP 192.168.1.134 que es la que tenía asignada. Si dentro del código de Android usamos localhost no obtendríamos respuesta del servicio web ya que nos estaríamos refiriendo al propio emulador de Android.
 
 Para terminar, tenemos que darle permiso a la aplicación para el acceso a internet. Esto lo hacemos en el fichero **AndroidManifest.xml** que nos quedará de la siguiente manera:
 
-{% highlight xml linenos %}
+``` xml
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.jhernandz"
@@ -281,7 +281,7 @@ Para terminar, tenemos que darle permiso a la aplicación para el acceso a inter
         </activity>
     </application>
 </manifest>
-{% endhighlight %}
+```
 
 Con todos los pasos finalizados es hora de ejecutar tanto el servidor web donde esta alojado el servicio como la aplicación Android para comprobar que todo funciona correctamente.
 

@@ -17,14 +17,16 @@ Si estamos en el modo integrado no tendremos que realizar ninguna modificación 
 
 Si el servidor es una versión anterior, IIS 5 o IIS 6, tenemos dos posibilidades para hacer que funcionen las aplicaciones. La primera que voy a explicar requiere la modificación de las url para añadirle la extensión **.aspx**. Lo que significa que nuestras url tendrán la siguiente forma:
 
-    /Home.aspx
-    /Home.aspx/About
-    /Account.aspx/LogOn
+``` none
+/Home.aspx
+/Home.aspx/About
+/Account.aspx/LogOn
+```
 
 Lo positivo de esta forma es que no requiere realizar ningún tipo de modificación en el IIS, lo cual puede ser interesante si no tenemos la posibilidad de acceder a él porque tenemos contratado el servicio con una empresa externa. Por otra parte, lo negativo es que las url no quedan completamente limpias ya que siempre aparece la extensión aspx. Para realizar este cambio tenemos que acceder al fichero **Global.asax** y modificar el método **RegisterRoutes** de esta forma:
 
 
-{% highlight csharp linenos %}
+``` csharp
 public static void RegisterRoutes(RouteCollection routes)
 {
   routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
@@ -41,7 +43,7 @@ public static void RegisterRoutes(RouteCollection routes)
       new { controller = "Home", action = "Index", id = "" }
     );
 }
-{% endhighlight %}
+```
 
 Simplemente con este cambio ya hemos conseguido que nuestra aplicación funcione en una versión inferior a la 7 en IIS. Hay que tener en cuenta que si dentro de nuestra aplicación hemos creado algún enlace sin utilizar el helper **Html.ActionLink()** tendremos que revisar estos enlaces para que contengan la extensión .aspx. Los enlaces creados con el helper anterior ya lo tendrán por defecto.
 

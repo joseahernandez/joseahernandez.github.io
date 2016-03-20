@@ -6,7 +6,7 @@ title: Leer XML en Android
 
 Leer ficheros XML en Android es una tarea con la que posiblemente nos enfrentemos bastante a menudo, ya sea porque creamos nosotros mismos esos ficheros para almacenar datos, porque lo obtenemos de un servicio web o de cualquier otra forma. Android nos proporciona tres formas para poder enfrentarnos a esta tarea: XMLPull, SAX y DOM. En esta entrada vamos a ver como podemos leer un fichero XML con DOM. Para comenzar lo primero que necesitamos es un fichero XML así que aquí pongo un ejemplo del fichero que vamos a leer:
 
-{% highlight xml linenos %}
+``` xml
 <libros>
     <libro>
         <titulo>La última cripta</titulo>
@@ -59,13 +59,13 @@ Leer ficheros XML en Android es una tarea con la que posiblemente nos enfrentemo
         <precio>0,89</precio>
     </libro>
 </libros>
-{% endhighlight %}
+```
 
 Este fichero contiene 10 libros de los cuales tenemos su título, su autor y su precio. Supongamos que este fichero lo tenemos en la carpeta *raw* de nuestro proyecto y su nombre es *libros.xml*. Como ya sabemos cual va a ser la información con la que vamos a trabajar, nos creamos una clase a la que llamaremos **Libro** para almacenar los datos de cada libro.
 
 <!--more-->
    
-{% highlight java linenos %}
+``` java
 class Libro {
 
     private String titulo;
@@ -108,11 +108,11 @@ class Libro {
         this.precio = precio;
     }
 }
-{% endhighlight %}
+```
 
 Una vez que tenemos esta clase, vamos a crearnos un método que lea todos los libros de este XML y nos devuelva un vector con todos los libros leídos.
 
-{% highlight java linenos %}
+``` java
 public Vector<Libro> leerLibros() {
     ArrayList<Libro> libros = new ArrayList<Libro>();
 
@@ -162,11 +162,11 @@ public Vector<Libro> leerLibros() {
         }
     }
 }
-{% endhighlight %}
+```
 
 Simplemente con este método conseguiríamos tener todo nuestro fichero XML parseado y en un vector de elementos Libro. Si el documento en vez de estar en nuestro proyecto lo recuperáramos de un servicio web como hemos mencionado antes, la forma de parsearlo sería la misma. Lo único que tendríamos que modificar es la forma de recuperar el fichero. En vez de leerlo de los recursos, obtendríamos una conexión al servidor para realizar la petición de la siguiente forma:
 
-{% highlight java linenos %}
+``` java
 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 DocumentBuilder builder = factory.newDocumentBuilder();
 
@@ -182,6 +182,6 @@ InputStream is = buffer.getContent();
 Document doc = builder.parse(is);
 
 // ...
-{% endhighlight %}
+```
 
 Como se puede ver no nos ha costado mucho obtener el array con todos los libros contenidos en nuestro XML.

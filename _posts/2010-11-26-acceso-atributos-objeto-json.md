@@ -2,7 +2,6 @@
 layout: post
 comments: false
 title: Acceder a los atributos de objetos JSON
-date: 2010-11-26 10:43:00
 ---
 
 El otro día hable sobre como podíamos usar [JSON de una forma sencilla](/2010/02/10/uso-json-javascript.html) en una web. Ahora vamos a dar un paso más y veremos otro uso que podemos hacer con el formato JSON. Hoy veremos cómo podemos **obtener el nombre de los atributos de un objeto JSON**.
@@ -11,7 +10,7 @@ Supongamos que tenemos una función en JavaScript que nos crea una tabla a parti
 
 Lo primero que vamos a ver es como obtener los atributos de un objeto JSON. Para ello utilizaremos el siguiente código:
 
-{% highlight javascript linenos %}
+``` javascript
 var cadena = // Cadena con formato JSON
 
 var valores = JSON.parse(cadena);
@@ -24,7 +23,7 @@ if( valores.length > 0 ) {
 }
 else
   alert("No hay datos");
-{% endhighlight %}
+```
 
 <!--more-->
 
@@ -34,7 +33,7 @@ Una vez que sabemos cómo obtener los atributos de un objeto las cosas van parec
 
 Una vez que tenemos en mente estos pasos vamos a crear nuestra función para generar nuestra tabla.
 
-{% highlight javascript linenos %}
+``` javascript
 function generarTabla(datos) {
   if( datos != '' ) {
     var i;
@@ -64,13 +63,13 @@ function generarTabla(datos) {
     $('body').append(tabla);
   }
 }
-{% endhighlight %}
+```
 
 Lo primero que hacemos es obtener los atributos del objeto y guardarlos en un array. Posteriormente creamos la tabla con ayuda de JQuery y vamos formando la cabecera recorriendo el array anterior y añadiendo una celda por cada atributo. Cuando tenemos la cabecera pasamos al cuerpo de la tabla. Recorremos todos los datos y todos los atributos que tiene cada dato. Añadimos el valor del atributo usando para acceder a él la función eval y lo vamos añadiendo en filas que posteriormente añadiremos al tbody de la tabla. Por ultimo añadimos el tbody a la tabla y ponemos la tabla en el body de la página html.
 
 Si le pasamos alguna de las siguientes cadenas a nuestra función, obtendremos una tabla con los datos de la cadena pasada.
 
-{% highlight javascript linenos %}
+``` javascript
 var libros = "[
     {"titulo": "La caida de los gigantes", "autor": "Ken Follet"}, 
     {"titulo": "Aqueron", "autor": "Sherrilyn Kenyon"},
@@ -85,4 +84,4 @@ var alumnos = "[
     {"nombre": "Sara", "calificacion": 8},
     {"nombre": "Paco", "calificacion": 5}
 ]";
-{% endhighlight %}
+```
