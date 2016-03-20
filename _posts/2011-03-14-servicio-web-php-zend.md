@@ -15,7 +15,7 @@ Usaremos la misma base de datos que en el ejemplo antes mencionado, el script de
 
 La clase que implementará los métodos que vamos a ofrecer como servicios web será la misma, pero en esta ocasión tendrá unos comentarios en los métodos disponibles:
 
-{% highlight php linenos %}
+``` php
 <?php
 class GestionAutomoviles
 {
@@ -84,7 +84,7 @@ class GestionAutomoviles
   }
 }
 ?>
-{% endhighlight %}
+```
 
 Los comentarios que aparecen delante de los métodos, describen su funcionalidad y proporcionan información para que cualquier persona que quiera consumir el servicio pueda realizarlo sabiendo los parámetros que tiene que pasarle y el valor que devuelve.
 
@@ -92,7 +92,7 @@ Estos comentarios serán usados por Zend para generar el fichero WSDL así que t
 
 Ahora crearemos el servicio, para ello creamos un nuevo archivo que llamaremos *servicio.php*, en él pondremos el siguiente código:
 
-{% highlight php linenos %}
+``` php
 <?php
   include 'Soap/AutoDiscover.php';
   include 'Soap/Server.php';
@@ -114,7 +114,7 @@ Ahora crearemos el servicio, para ello creamos un nuevo archivo que llamaremos *
   }
 
 ?>
-{% endhighlight %}
+```
 
 Al principio del fichero incluimos tanto la clase que hemos generado anteriormente como las clases **AutoDiscover** y **Server** de Zend para poder utilizarlos. Posteriormente miramos si tenemos el parámetro wsdl en la url de la solicitud. En caso afirmativo creamos un objeto de tipo **Zend_Soap_AutoDiscover** que es el que se encargará de generar la descripción del servicio en formato WSDL. Después le indicamos al objeto creado cual es la clase que contiene los métodos y por último llamamos al metodo **handle**.
 
@@ -122,7 +122,7 @@ Si no está el parámetro wsdl en la url lo que hacemos es crearnos un objeto **
 
 El código del cliente para consumir el servicio será este:
 
-{% highlight php linenos %}
+``` php
 <?php
    include 'Soap/Client.php';
    $client = new Zend_Soap_Client(
@@ -158,6 +158,6 @@ El código del cliente para consumir el servicio será este:
       }
    ?>
    </ul>
-{% endhighlight %}
+```
 
 Como vemos simplemente creando un objeto de tipo **Zend_Soap_Client** y pasandolo el fichero (url o ruta) WSDL tenemos el objeto con el cual podemos llamar a los métodos que implementa el servicio.

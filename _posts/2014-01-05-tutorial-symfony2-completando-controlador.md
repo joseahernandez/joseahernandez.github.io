@@ -8,7 +8,7 @@ Si has seguido el tutorial anterior sobre los [controladores de Symfony 2](/2013
 
 El primer paso que vamos a hacer es definir una ruta para ver el detalle de los posts. Para ello vamos al fichero *src/jhernandz/BlogBundle/Resources/config/routing.yml* y le añadimos una nueva ruta que llamaremos **detail**:
 
-{% highlight yaml linenos %}
+```yaml
 home:
     pattern: /
     defaults: { _controller: jhernandzBlogBundle:Default:index }
@@ -16,23 +16,24 @@ home:
 detail:
     pattern: /post/{slug}
     defaults: { _controller: jhernandzBlogBundle:Default:detail}
-{% endhighlight %}
+```
 
 <!--more-->
 
 Podemos ver que el pattern de esta nueva ruta es bastante distinto del patter que teníamos en *home*. El pattern de *home* nos indica que el action asociado se ejecutará cuando se solicite una url sin ningún parámetro más. En cambio en *detail* estamos diciendo que se ejecuta el action cuando la url sea **/post/** seguido de una cosa que hemos llamado *{slug}*. Las **{ }** indican que lo que viene dentro de ellas es una variable en la que cualquier carácter que se inserte en la url quedará almacenada en ella. Si por ejemplo la url que nos llega es *http://blog/post/my-first-post* el valor de la variable **slug** será *my-first-post*. Si la url es *http://blog/post/1* el valor será *1*. Además, esto también está indicando que el action **detail** del controlador **Default** va a recibir esta variable *slug* como parámetro. De forma que la declaración de este action será así:
 
-{% highlight php linenos startinline=true %}
+```php
+<?php
 public function detailAction($slug)
 {
 }
-{% endhighlight %}
+```
 
 Una vez que conocemos estos detalles vamos a ver como usarlos. Si recordamos de la definición de la entity *Post* tenemos un atributo que llamamos **slug**. La idea es usar este atributo como identificador del post y que cuando se solicite la url de un post determinado se use una url como *http://blog/post/my-first-post* que es más elegante y los buscadores tendrán ese resultado más en cuenta que una url como *http:/blog/post/1*.
 
 Con esto en mente, ahora tenemos que modificar la plantilla donde se muestran todas las entradas para añadirles la url del detalle. Para esto usaremos la función **path** que generará una url a la ruta que indiquemos. En nuestro caso la usaremos indicando que genere la ruta a *detail* y como parámetro le indicaremos el slug de la noticia a la que queremos que genere la ruta, como por ejemplo:
 
-```html
+```none
 {% raw %}{{{% endraw %} path('details', {% raw %}{{% endraw %} 'slug': 'my-first-post'{% raw %}}{% endraw %}) {% raw %}}}{% endraw %}
 ```
 
@@ -40,13 +41,13 @@ Como podemos ver, el segundo parámetro de la función **path** es un array de T
 
 Ahora que vamos a crear la ruta para los detalles de los post, también sería buena idea crear una ruta en la etiqueta que indica el número de comentarios que tiene cada post y que apunte directamente al primer comentario de la noticia. Para esto utilizaremos también la función path para que genere la ruta y después le añadiremos el [anchor](http://en.wikipedia.org/wiki/HTML_anchor#Ancho) quedándonos de la siguiente forma:
 
-```html
+```none
 {% raw %}{{ path('details', {'slug': 'my-first-post'}) }}#comments{% endraw %}
 ```
 
 Una vez que hemos entendido como funciona la generación de rutas, modificamos la plantilla *index.html.twig* y la dejamos de la siguiente manera:
 
-{% highlight html linenos %}
+```html
 {% raw %}{% extends '::base.html.twig' %}{% endraw %}
 
 {% raw %}{% block stylesheets %}{% endraw %}
@@ -80,11 +81,11 @@ Una vez que hemos entendido como funciona la generación de rutas, modificamos l
         </article>
     {% raw %}{% endfor %}{% endraw %}
 {% raw %}{% endblock %}{% endraw %}
-{% endhighlight %}
+```
 
 El siguiente paso que tenemos que dar es completar el controlador que se encargará de mostrar los detalles del post. Su funcionamiento es bastante sencillo, como ya hemos mencionado antes, recibirá un parámetro con el slug del post del que queremos ver los detalles, así que tendrá que buscar en la base de datos ese post y renderizarlo en una plantilla. Vamos al fichero *DefaultController.php* y completemos el action de la ruta detalle de la siguiente forma:
 
-{% highlight php linenos startinline=true %}
+```php
 public function detailAction($slug)
 {
     $em   = $this->getDoctrine()->getManager();
@@ -101,8 +102,8 @@ public function detailAction($slug)
             'post' => $post
         )
     );
-}    
-{% endhighlight %}
+}
+```
 
 Como ya hicimos anteriormente en otra entrada, estamos obteniendo el *EntityManager* de doctrine. A continuación obtenemos el repositorio de la clase *Post* y finalmente llamamos al método **findOneBySlug**. Doctrine nos proporciona unos métodos que podemos utilizar combinandolos con las propiedades del objeto sobre el que hacemos la consulta para obtener datos. Estos métodos son los siguientes:
 
@@ -115,7 +116,7 @@ El siguiente paso es comprobar si se ha obtenido un Post. En caso de que no se h
 
 Con el controlador terminado, pasamos ahora a editar la plantilla. Como hemos mencionado antes, crearemos un fichero llamado *jhernandzBlogBundle:Default:detail.html.twig* en la ruta de nuestro proyecto *src/jhernandz/BlogBundle/Resources/views/Default* y esta plantilla contendrá el siguiente código:
 
-{% highlight html linenos %}
+```html
 {% raw %}{% extends '::base.html.twig' %}{% endraw %}
 
 {% raw %}{% block stylesheets %}{% endraw %}
@@ -146,11 +147,11 @@ Con el controlador terminado, pasamos ahora a editar la plantilla. Como hemos me
         </div>
     </section>
 {% raw %}{% endblock %}{% endraw %}
-{% endhighlight %}
+```
 
 Si ahora vamos a la url de nuestra página *http://blog/app_dev.php* y pinchamos encima del título de cualquier noticia, nos redirigirá a la página de detalle, donde podremos ver toda la noticia con sus comentarios. De nuevo, si nos fijamos en la barra de depuración de Symfony, podemos ver que se ejecutan tres consultas. Si pulsamos en ella veremos que una es la que obtiene el post, otra el autor y la última los comentarios. Vamos a optimizar un poco esto para obtener a la vez el post y el autor. De esta formas nos ahorrarnos una consulta y obtendremos un mejor rendimiento. Para ello vamos de nuevo a la clase *PostRepository* que se encuentra en *src/jhernandz/BlogBundle/Entity* y añadimos el siguiente método:
 
-{% highlight php linenos startinline=true %}
+```php
 public function findPostWithAuthor($slug)
 {
     $em = $this->getEntityManager();
@@ -168,11 +169,11 @@ public function findPostWithAuthor($slug)
 
     return $query->getOneOrNullResult();
 }
-{% endhighlight %}
+```
 
 Con el método creado, vamos al controlador para utilizar esta nueva función quedando su código de la siguiente manera:
 
-{% highlight php linenos startinline=true %}
+```php
 public function detailAction($slug)
 {
     $em   = $this->getDoctrine()->getManager();
@@ -190,13 +191,13 @@ public function detailAction($slug)
         )
     );
 }
-{% endhighlight %}
+```
 
 Como ya ocurrió en la entrada anterior, al utilizar un método de nuestro repositorio que obtiene dos objetos mediante una dql (Post y Author) el resultado es un array asociativo con una única componente llamada *post* que contiene al objeto Post, por lo tanto a la plantilla le pasamos esta componente del array. Si vemos de nuevo el número de consultas que se han realizado, podemos comprobar que se han reducido a solamente dos.
 
 Para terminar esta entrada vamos a añadir unos estilos a nuestra css para visualizar algo mejor esta pantalla de detalles, así que abrimos el fichero *post.css* que se encuentra en la ruta *src/jhernandz/BlogBundle/Resources/public/css* y le añadimos las siguientes lineas:
 
-{% highlight css linenos %}
+```css
 article
 {
     text-align: justify;
@@ -212,11 +213,13 @@ article
 {
     margin-bottom: 25px;
 }
-{% endhighlight %}
+```
 
 Finalmente en un terminal ejecutaremos el siguiente comando para que se actualice la css y ya podemos ver como nos ha quedado la pagina de detalle.
 
-    > php app/console assets:install
+```none
+> php app/console assets:install
+```
 
 Así finaliza la entrada de hoy. En la próxima crearemos un formulario Symfony para poder añadir comentarios y veremos cómo gestionarlo.
 

@@ -12,6 +12,7 @@ Vamos a instalar el bundle para poder crear nuestras fixtures, así que abrimos 
 
 <!--more-->
 
+``` json
     ...
     "require": {
         ...
@@ -20,16 +21,20 @@ Vamos a instalar el bundle para poder crear nuestras fixtures, así que abrimos 
         "doctrine/doctrine-fixtures-bundle": "dev-master"
     },
     ...
+```
 
 Lo que hemos indicado a composer es que cuando estemos en modo de desarrollo (development) queremos que al llamar a composer install o composer update, nos instale además de las dependencias indicadas en la clave *require*, las indicadas en *require-dev*.
 
 Lo siguiente que tenemos que hacer es instalar la dependencia que acabamos de indicar, para ello tecleamos el siguiente comando en un terminal:
 
-    > composer update
+``` none
+> composer update
+```
 
 Comenzará la descarga del nuevo bundle y cuando finalice únicamente tendremos que activarlo en nuestra aplicación. Para llevar a cabo la activación, abriremos el fichero *AppKernel.php* que se encuentra en la carpeta *app* y en la función *registerBundles*, dentro del if que comprueba si estamos en el entorno de dev o test, añadiremos el nuevo bundle descargado.
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 public function registerBundles()
 {
     ...
@@ -40,17 +45,20 @@ public function registerBundles()
     }
     ...
 }
-{% endhighlight %}
+```
 
 Para comprobar si el nuevo bundle se ha instalado correctamente escribiremos en un terminal:
 
-    > app/console
+``` none
+> app/console
+```
 
 Si en la lista de comandos que aparecen se encuentra *doctrine:fixtures:load* el bundle estará instalado y activado correctamente.
 
 Ahora pasaremos a crear nuestros ficheros de fixtures. Estos ficheros por convención suelen situarse en el directorio del bundle al que pertenece la entidad, dentro de *DataFixtures/ORM*, así que para nuestro ejemplo crearemos estas dos carpetas para obtener la ruta *src/jhernandz/BlogBundle/DataFixtures/ORM* y dentro de la carpeta *ORM* el fichero *Users.php* con el siguiente código:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 namespace jhernandz\BlogBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -79,19 +87,22 @@ class Users extends AbstractFixture implements OrderedFixtureInterface
         return 1;
     }
 }
-{% endhighlight %}
+```
 
 Esta clase se va a encargar de crearnos un usuario y almacenarlo en la base de datos. Como podemos observar la clase implementa dos métodos, *getOrder* simplemente indica el orden en el que se van a ejecutar todos los ficheros de fixtures que tengamos. En este caso este será el primer fichero que se ejecutará y cargará sus datos en la base de datos. El otro método *load* se encarga de crear un usuario y almacenarlo en la base de datos. Para ello, se crea un objeto de tipo **User** y se le asignan los atributos que queramos. A continuación, con ayuda del objeto **ObjectManager** que recibe como parámetro el método load, se llama al  método **persist** que se encarga de almacenar en memoria el objeto que acabamos de crear. Finalmente se llama al método **flush** que es el encargado de almacenar todos los objetos que se hayan almacenado en memoria mediante las llamadas a **persist** en la base de datos.
 
 En el método **load** podríamos haber creado tantos usuarios como quisiéramos, aunque yo he optado por crear solamente uno. Para probar que funciona correctamente nuestro fichero de fixtures, abrimos un terminal y ponemos los siguiente:
 
-    > app/console doctrine:fixtures:load
+``` none
+> app/console doctrine:fixtures:load
+```
 
 Este comando eliminará todo el contenido de nuestra base de datos y ejecutará todos los ficheros de fixtures que tengamos, insertando los datos en ella. En nuestro caso insertará únicamente el usuario que acabamos de crear. Si nos conectamos a la base de datos con PHPMyAdmin o nuestro gestor de base de datos preferido, podemos ver como en la tabla *user* tenemos el usuario almacenado. Aquí podemos ver un grave problema de seguridad puesto que la contraseña se ha almacenado en texto plano. De momento vamos a dejarlo así y en una próxima entrada explicaré como solucionar este problema.
 
 Vamos a seguir creando nuevos fixtures para las dos tablas que nos quedan, así que ahora creamos el fichero *Posts.php* con el siguiente código:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 namespace jhernandz\BlogBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -138,13 +149,14 @@ EOF;
         return 2;
     }
 }
-{% endhighlight %}
+```
 
 En esta ocasión hemos utilizado el objeto **ObjectManager** para recuperar todos los usuario que hay en la base de datos. Para recuperarlos, lo primero que le hemos hecho es obtener mediante  el **ObjectManager** el repositorio *jhernandzBlogBundle:User*, que como nos podemos imaginar, es el repositorio de la clase **User**, a continuación llamamos al método **findAll()** del repositorio que se encargará de devolvernos un array de objetos **User** con todos los usuario que hay en la base de datos. El siguiente paso, es recorrer todos los usuarios y crear 4 posts para cada uno de ellos. En el ejemplo solo se ha creado un usuario, por lo tanto únicamente se crearán 4 post.
 
 Finalmente el último fichero de fixtures que vamos a crear es *Comments.php* y que contendrá el siguiente código:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 namespace jhernandz\BlogBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -196,13 +208,14 @@ EOF;
         return 3;
     }
 }
-{% endhighlight %}
+```
 
 El contenido es bastante similar al fichero de post, pero esta vez creando un número aleatorio de comentarios para cada uno de los posts que tenemos.
 
 Una vez que tenemos todos los fichero creados y después de haber llamado al comando *app/console doctrine:fixtures:load* en la base de datos tendremos todos esos datos cargados, así que ahora vamos a ir al controlador para decirle que los post que muestre los lea de la base de datos. Abrimos el fichero *src/jhernandz/BlogBundle/Controller/DefaultController.php* borramos el contenido del método **indexAction** y escribimos lo siguiente:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 namespace jhernandz\BlogBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -222,13 +235,14 @@ class DefaultController extends Controller
         );
     }
 }
-{% endhighlight %}
+```
 
 Como se puede apreciar el contenido del controlador lo hemos dejado en 3 líneas que son las encargadas de realizar todo el trabajo. Si vamos ahora a la url *http://blog/app_dev.php* podemos observar como se muestra la página al igual que antes, pero esta vez con los valores obtenidos desde la base de datos. Todo parece correcto, pero si nos fijamos en la barra de depuración de Symfony, situada en la parte inferior, podemos ver que se ejecutan 6 consultas a la base de datos. Si miramos detalladamente las consultas que se realizan podemos ver que hay una consulta para obtener los posts, otra consulta para obtener el nombre del usuario y 4 consultas más para obtener los comentarios de cada post. Si los post tuvieran distintos autores tendríamos más consultas para obtener todos los autores y si tuviéramos más post tendríamos muchas más consultas para obtener todos los comentarios. Como podemos imaginar con varios post podemos tener numerosas consultas a la base de datos cosa que no es buena para el rendimiento de nuestro sitio web. Así que tenemos que reducir ese número de consultas. Para ello vamos a crear una consulta personalizada que obtenga toda esta información con una sola consulta.
 
 Esta consulta personalizada la crearemos en una nueva clase que comúnmente se conoce como repositorio. En estas clases repositorios, se crean métodos que se encargan de consultar la base de datos y devolver los datos solicitados. En nuestro caso, como vamos a hacer una consulta sobre los post crearemos una clase llamada *PostRepository* así que creamos en la ruta *src/jhernandz/BlogBundle/Entity* el fichero *PostRepository.php*. Este fichero contendrá el siguiente código:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 namespace jhernandz\BlogBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
@@ -253,7 +267,7 @@ class PostRepository extends EntityRepository
         return $res;
     }
 }
-{% endhighlight %}
+```
 
 Como podemos ver hemos creado un método llamado *findAllPostsWithComments* que se encargará de recuperar todos los post, el nombre del autor y el número de comentarios. Si nos fijamos bien en la consulta, observaremos que no se trata de una consulta SQL normal. Doctrine utiliza un lenguaje llamado DQL para realizar las consultas, podemos encontrar más información en su [página oficial](https://doctrine-orm.readthedocs.org/en/latest/reference/dql-doctrine-query-language.html?highlight=dql). Es bastante sencillo comprender este lenguaje ya que es muy parecido al SQL normal, pero más orientado a objetos.
 
@@ -261,7 +275,8 @@ Para comprender la dql nos fijamos en la componente *FROM* en la cual se le indi
 
 El siguiente paso que tenemos que dar antes de poder llamar a este método, es indicarle a la entity que cuenta con una clase repositorio donde tendrá métodos para poder utilizar. Esto se realiza añadiendo un atributo a las anotaciones de las entities, para ello nos vamos a editar el fichero *Post* y lo actualizamos de la siguiente forma:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 namespace jhernandz\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -272,13 +287,14 @@ use Doctrine\ORM\Mapping as ORM;
 class Post
 {
     ...
-{% endhighlight %}
+```
 
 Lo único que hemos hecho ha sido añadirle a la anotación *Entity* el atributo *repositoryClass* y a continuación le hemos indicado el nombre de la clase que actual como repositorio.
 
 Ahora es el turno de irnos al *DefaultController.php* y actualizar en el método *indexAction* la llamada al método del repositorio *findAll* por la nueva:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 public function indexAction()
 {
     $em = $this->getDoctrine()->getManager();
@@ -290,11 +306,11 @@ public function indexAction()
         array('items' => $items)
     );
 }
-{% endhighlight %}
+```
 
 Lo último que nos queda por hacer es actualizar la plantilla de la vista, ya que el método *findAllPostsWithComments* no devuelve un array de objetos Post como el método *findAll*, si no que devuelve un array de arrays cuya primera componente es un objeto Post, su segunda componente es un entero con el número de comentarios y su tercera componente es un string con el nombre del autor. Así que vamos al fichero *src/jhernandz/Resources/view/Default/index.html.twig* y lo dejamos de la siguiente manera:
 
-{% highlight html linenos %}
+``` html
 {% raw %}{% extends '::base.html.twig' %}{% endraw %}
 
 {% raw %}{% block stylesheets %}{% endraw %}
@@ -315,12 +331,11 @@ Lo último que nos queda por hacer es actualizar la plantilla de la vista, ya qu
         </article>
     {% raw %}{% endfor %}{% endraw %}
 {% raw %}{% endblock %}{% endraw %}
-{% endhighlight %}
+```
 
 Si volvemos a probar la página y miramos la barra de depuración, vemos que ahora únicamente se realiza una consulta, con lo que hemos conseguido mejorar el rendimiento de la aplicación.
 
 Hasta aquí esta entrada, en la próxima veremos como implementar la página de detalle de una entrada y como permitir añadir comentarios
-
 
 Tutorial de Symfony 2
 

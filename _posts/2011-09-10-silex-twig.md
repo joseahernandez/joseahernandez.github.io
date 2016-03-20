@@ -14,56 +14,61 @@ Vamos como siempre a crear una pequeña aplicación para mostrar de forma práct
 
 Lo primero será crearnos un directorio para nuestra aplicación al que llamaremos **Software**, seguidamente descargaremos Silex desde su página de descarga y guardaremos el fichero **silex.phar** dentro de nuestro directorio. Para dejarlo todo listo necesitamos también descargar Twig, procedemos a hacerlo desde su página y lo almacenamos en el directorio de la aplicación dentro de una nueva carpeta que crearemos llamada **vendor**. También vamos a crear las siguientes carpetas dentro de la carpeta del proyecto: **views** que será donde almacenaremos las plantillas que creemos, **css** para poner nuestra hoja de estilos y **images** donde almacenaremos las imágenes usadas. De esta forma el directorio de trabajo nos quedará así:
 
-    Software
+```none
+Software
+|
+| - vendor
     |
-    | - vendor
-        |
-        | - twig
-              |
-              | + lib
-    | + views
-    |
-    | - css
-    | - images
-    |
-    | - index.php
-    | - silex.phar
-    | - .htdocs
+    | - twig
+          |
+          | + lib
+| + views
+|
+| - css
+| - images
+|
+| - index.php
+| - silex.phar
+| - .htdocs
+```
 
 Cuando tengamos todo nuestro directorio de trabajo listo, comenzaremos a configurar Silex. Lo primero que haremos será crear un fichero **.htaccess** para que todas las solicitudes a nuestra aplicación se redirijan al mismo fichero. En nuestro caso he decidido que todas las solicitudes se redirijan al fichero **index.php**. El código para el fichero **.htaccess** será el siguiente:
 
-    <IfModule mod_rewrite.c>
-        RewriteEngine On
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteRule ^(.*)$ index.php [QSA,L]
-    </IfModule>
+```none
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+```
 
 Ahora crearemos el fichero al que llegarán las solicitudes, **index.php**, en él tendremos la lógica de nuestra aplicación. Lo primero que tenemos que indicar es que vamos a utilizar la extensión de Twig y en sistema de enrutamiento de Silex, así que ponemos lo siguiente en el fichero:
 
-{% highlight php linenos %}
+``` php
 <?php
 require_once 'silex.phar';
 
-$app = new Silex\\Application();
+$app = new Silex\Application();
 
-$app->register(new Silex\\Extension\\UrlGeneratorExtension());
-$app->register(new Silex\\Extension\\TwigExtension(), array(
+$app->register(new Silex\Extension\UrlGeneratorExtension());
+$app->register(new Silex\Extension\TwigExtension(), array(
                             'twig.path' => __DIR__ . '/views',
                             'twig.class_path' => __DIR__ . '/vendor/twig/lib'
 ));
-{% endhighlight %}
+```
 
 El sistema de enrutamiento nos permite tener direcciones url limpias y sin los feos parámetros que se envían por GET. Mientras que Twig como ya sabemos nos ayuda a crear plantillas para mostrar la información al usuario. Como vemos en el código para registrar el sistema de enrutamiento simplemente tenemos que hacer una llamada a la función register indicando la extensión de enturamiento (linea 6) mientras que para registrar Twig además de indicar la extensión (linea 7), le diremos dónde está el directorio en el que tiene que buscar las plantillas (linea 8) y el directorio donde hemos descargado antes Twig (linea 9).
 
 
 Una vez que tenemos configurado Twig ya podemos comenzar a programar, lo primero será crear una página de inicio. Para ello vamos a nuestro fichero **index.php** y añadimos al final del fichero lo siguiente:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 $app->get('/', function() use($app) {
     return $app['twig']->render('index.twig.html');
 })->bind('inicio');
-{% endhighlight %}
+```
 
 Con este código estamos diciéndole a Silex que cuando reciba una petición por GET a la raiz del sitio ejecute la función indicada. Una solicitud GET es cuando escribimos una ruta en el navegador web o pinchamos un enlace, mientras que una solicitud POST se suele usar al enviar formularios e información. También podemos trabajar con solicitudes POST en Silex, simplemente tendremos que usar la función **post** en vez de **get**. Si nos fijamos en la función que queremos que se ejecute aparece al lado de su declaración lo siguiente **use ($app)** esto permite que dentro de la función se pueda usar la variable declarada fuera y que se llama **$app**. Esta variable **$app** es la que contiene todo el motor de Silex y la usaremos dentro de casi todas las funciones.
 
@@ -73,7 +78,7 @@ Por último, con lo que devuelve la llamada del método **$app->get()** se llama
 
 Como aún no hemos creado ninguna plantilla vamos a ponernos a ello ahora, vamos a la carpeta **views** y creamos un nuevo fichero que llamaremos **layout.twig.html** con el siguiente contenido:
 
-{% highlight html linenos %}
+``` html
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -114,13 +119,13 @@ Como aún no hemos creado ninguna plantilla vamos a ponernos a ello ahora, vamos
     </div>
 </body>
 </html>
-{% endhighlight %}
+```
 
 Si miramos como se han creado los enlaces para cada una de la sección de la página, vemos que se ha llamado a unas funciones para crearlos. Cuando Silex llama a Twig para que renderice una plantilla, Silex le pasa a Twig la variable que tiene toda la aplicación Silex que el usuario ha creado. En nuestro caso llamamos a esta variable **$app**, por eso ahora desde dentro de Twig tenemos una variable que se llama **app** (Twig no utiliza el símbolo $ para las variables, motivo por el cual desaparece el símbolo) y que podemos utilizar cuando la necesitemos. En este caso la utilizamos para llamar a la extensión de enturamiento **url_generator** y en ella llamamos al método **generate** pasando como parámetro el mismo nombre que indicamos dentro del fichero **index.php** al llamar al método **bind**. Aunque de momento solo hemos visto una ruta, yo ya he creado el enlace para las otras dos y posteriormente en el método **bind** las llamare con ese nombre.
 
 Ahora que tenemos la plantilla base crearemos el fichero de la página principal, que como hemos dichos antes, llamaremos **index.twig.html**.
 
-{% highlight html linenos %}
+``` html
 {% raw %}{% extends 'layout.twig.html' %}{% endraw %}
 
 {% raw %}{% block tituloSeccion%}{% endraw %}
@@ -138,19 +143,20 @@ utilidad que puedes usar en tu día a día de forma gratuita.
 ...
 </p>
 {% raw %}{% endblock %}{% endraw %}
-{% endhighlight %}
+```
 
 Esta plantilla no contiene casi nada, simplemente un poco de información de la página y contenido para rellenar. A continuación volvemos al fichero **index.php** y vamos a crear la siguiente función justo debajo de lo que tenemos ahora.
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 $app->get('/imagenes', function() use ($app) {
     return $app['twig']->render('imagenes.twig.html');
 })->bind('imagenes');
-{% endhighlight %}
+```
 
 De nuevo como antes le indicamos a Silex que si la ruta que recibe es **imagenes** tiene que renderizar la plantilla **imagenes.twig.html**. Esta plantilla tiene el siguiente contenido:
 
-{% highlight html linenos %}
+``` html
 {% raw %}{% extends 'layout.twig.html' %}{% endraw %}
 
 {% raw %}{% block title %}{% endraw %}Imagenes - {% raw %}{{ parent() }}{% endblock %}{% endraw %} 
@@ -186,19 +192,20 @@ De nuevo como antes le indicamos a Silex que si la ruta que recibe es **imagenes
     </p>
   </div>
 {% raw %}{% endblock %}{% endraw %}
-{% endhighlight %}
+```
 
 Seguimos con el fichero **index.php** y añadimos la última función:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 $app->get('/ofimatica', function() use ($app) {
     return $app['twig']->render('ofimatica.twig.html');
 })->bind('ofimatica');
-{% endhighlight %}
+```
 
 Esta función renderiza la plantilla **ofimatica.twig.html** que tenemos que crear dentro del directorio de las plantillas con el siguiente codigo:
 
-{% highlight html linenos %}
+``` html
 {% raw %}{% extends 'layout.twig.html' %}{% endraw %}
 
 {% raw %}{% block title %}{% endraw %}Ofimática - {% raw %}{{ parent() }}{% endblock %}{% endraw %}
@@ -235,13 +242,14 @@ Texto
     </p>
 </div>
 {% raw %}{% endblock %}{% endraw %}
-{% endhighlight %}
+```
 
 Por último para que todo funcione correctamente en el fichero **index.php** al final del todo tenemos que añadir la siguiente línea:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 $app->run();
-{% endhighlight %}
+```
 
 El método **run** se encarga de ejecutar la aplicación, recuperar la solicitud que ha enviado el usuario y devolver la página que corresponda en cada caso.
 

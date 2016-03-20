@@ -28,12 +28,16 @@ Para comenzar cerramos la ventana con el programa en ejecución y hacemos clic e
 
 La funcionalidad del ejemplo será mostrar un mensaje cuando se pulse el botón, para ello lo primero que hago es incluir la cabecera para poder mostrar una ventana con un mensaje.
 
-    #include <qmessagebox.h>
+``` none
+#include <qmessagebox.h>
+```
 
 Posteriormente y dentro del método que se ejecuta cuando se pulsa el botón pondré el siguiente código.
 
-    QMessageBox::information(this, "Mensaje información", "Bienvenido a mi primera 
-        aplicación Qt");
+``` none
+QMessageBox::information(this, "Mensaje información", "Bienvenido a mi primera 
+    aplicación Qt");
+```
 
 Si ahora ejecutamos la aplicación y pulsamos el botón, el resultado que obtendremos será similar a esta imagen.
 

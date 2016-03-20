@@ -45,7 +45,7 @@ Ahora vamos a nuestra página aspx y de la caja de herramientas arrastramos el c
 
 El resto de sentencias serían así:
 
-{% highlight sql linenos %}
+``` sql
 SELECT Pelicula.id, Pelicula.titulo, Pelicula.duracion, 
     Pelicula.sinopsis, Pelicula.director AS director_id, Director.nombre, 
     Director.apellido, Pelicula.genero AS genero_id, Genero.nombre AS genero 
@@ -60,7 +60,7 @@ INSERT INTO Pelicula(titulo, duracion, genero, sinopsis, director) VALUES
     (@titulo, @duracion, @genero_id, @sinopsis, @director_id)
 
 DELETE FROM Pelicula where id = @id
-{% endhighlight %}
+```
 
 Cuando tengamos todas las sentencias completadas pulsaremos *Next* y por último *Finish* para completar la configuración del **SqlDataSource**. Si hemos insertado el **SqlDataSource** arrastrándolo desde la caja de herramientas ahora nos quedara asociarlo al **FormView**. Esto lo podemos hacer desde el menú contextual del control **FormView** (el que sale al pulsar la flecha ![Menú](/uploads/posts/images/menu_control.png) y seleccionando el **SqlDataSource** que acabamos de crear. Una vez seleccionado, se actualizará el control **FormView** (en caso de que no se actualice pulsaremos el enlace *Refresh Schema* del menú contextual) y veremos en la vista de diseño como se mostrará el control.
 
@@ -68,11 +68,13 @@ Cuando tengamos todas las sentencias completadas pulsaremos *Next* y por último
 
 Ahora vamos a modificar un poco la vista del control para dejarle un aspecto visual algo mejor. Lo primero que haremos es seleccionar el control **FormView** y cambiarle la propiedad **AllowPaging** a **True**. Después en el menú contextual del **FormView** haremos clic en al opción *Edit Templates*. Cambiará el diseño del control para que podamos editar las plantillas y a continuación modificaremos la propiedad **Text** de los tres **LinkButton** que aparecen en la parte inferior por *Editar*, *Borrar* e *Insertar*. También borraremos el texto "apellido", el texto "nombre" lo cambiaremos por "Director:" y haremos que el **Label** apellido esté en la misma línea que el nombre del director. Borraremos los siguientes campos para que no se muestren: *id*, *director_id* y *genero_id*. Después cambiamos todos los textos para ponerlos en mayúsculas y en negrita. Por último creamos una tabla con dos columnas y alojamos cada campo en su columna para que quede ordenado. Cuando terminemos, en el menú contextual pulsaremos *End Template Editing*. Si ahora ejecutamos nuestra aplicación el resultado tendrá un aspecto similar al siguiente:
 
-![](/uploads/posts/images/plantilla_mostrar_finalizada_fw.png)
+![](/uploads/posts/images/plantilla_mostrar_finalizada_fw.png){:width="750px"}
 
 Ahora pasaremos de nuevo a editar las plantillas y esta vez cuando estamos dentro de la opción editar plantilla, en el menú contextual seleccionaremos la opción *EditItemTemplate*. Creamos una tabla como antes para distribuir los datos mejor, el **Label** *id* lo cambiaremos por un **HiddenField** para evitar que al usuario se le muestre esa información y quedará de la siguiente manera:
 
-    <asp:HiddenField ID="idLabel1" runat="server" Value=''<%# Eval("id") %>'' />
+``` none
+<asp:HiddenField ID="idLabel1" runat="server" Value='<%# Eval("id") %>' />
+```
 
 Después añadiremos dos **SqlDataSource**, uno de ellos para obtener todos los directores y el otro para obtener los géneros. Comencemos con la configuración del **SqlDataSource** de directores, aquí lo que nos interesa obtener es el identificador, el nombre y el apellido de un director. Como queremos obtener el nombre y el apellido del director juntos, utilizaremos el operador de [concatenar](http://msdn.microsoft.com/en-us/library/aa276862(SQL.80).aspx) de forma que la select nos quedará así:
 
@@ -84,20 +86,21 @@ Por otra parte la configuración del de géneros será sencilla, simplemente sel
 
 Cuando los tengamos, eliminamos los **TextBox** para el nombre, apellido y género puesto que vamos a usar los **DropDownList** para facilitar la selección de estos datos. Añadimos dos **DropDownList**, uno para el género al que pondremos de nombre *DDLEditarGenero* y otro para el director que llamaremos *DDLEditarDirector*. Les asignamos a cada uno su correspondiente **SqlDataSource**, que hemos creado antes, seleccionándolo en la propiedad **DataSourceID**. Después para ambos controles indicamos en su propiedad **DataTextField** el campo *nombre* y en **DataValueField** el campo *id*, también pondremos la propiedad **AppendDataBoundItems** a *True* y en la propiedad **Items** pulsamos el icono con los tres puntos que sale al lado y añadimos una entrada. En el **DropDownList** de género indicaremos en la propiedad **Text** <em>"Seleccione un género"</em> y dejaremos la propiedad **Value** vacía, en el de directores, la propiedad **Text** será "Seleccione un director" y **Value** también vacío. A continuación vamos a la edición de código fuente y buscamos el código de los dos **DropDownList** que acabamos de crear, en ellos añadimos una nueva propiedad **SelectedValue** y le hacemos un *Bind* con los campos correspondientes que recuperemos del **SqlDataSource**. El código de los dos **DropDownList** nos quedará así:
 
+``` html
+<asp:DropDownList ID="DDLEditarGenero" runat="server" 
+    DataSourceID="SqlDataSourceGeneros" DataTextField="nombre" 
+    DataValueField="id" SelectedValue=''<%# Bind("genero_id") %>''
+    AppendDataBoundItems="True">
+        <asp:ListItem Value="" Text="Seleccione un género" />
+</asp:DropDownList>
 
-    <asp:DropDownList ID="DDLEditarGenero" runat="server" 
-        DataSourceID="SqlDataSourceGeneros" DataTextField="nombre" 
-        DataValueField="id" SelectedValue=''<%# Bind("genero_id") %>''
+<asp:DropDownList ID="DDLEditarDirector" runat="server" 
+    DataSourceID="SqlDataSourceDirectores" DataTextField="nombre" 
+    DataValueField="id" SelectedValue=''<%# Bind("director_id") %>'' 
         AppendDataBoundItems="True">
-            <asp:ListItem Value="" Text="Seleccione un género" />
-    </asp:DropDownList>
-
-    <asp:DropDownList ID="DDLEditarDirector" runat="server" 
-        DataSourceID="SqlDataSourceDirectores" DataTextField="nombre" 
-        DataValueField="id" SelectedValue=''<%# Bind("director_id") %>'' 
-            AppendDataBoundItems="True">
-                <asp:ListItem Value="" Text="Seleccione un director" />
-    </asp:DropDownList>
+            <asp:ListItem Value="" Text="Seleccione un director" />
+</asp:DropDownList>
+```
 
 
 Ahora cambiamos los texto de los **LinkButton** por Actualizar y Cancelar, eliminamos los campos de director_id, apellidos, genero_id con sus respectivos **TextBox**, renombramos la etiqueta nombre a *Director:*, cambiamos las propiedades del **TextoBox** de sinopsis y en la propiedad **TextMode** seleccionamos *MultiLine*, por último lo organizamos todo de nuevo en una tabla.

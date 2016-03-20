@@ -9,9 +9,11 @@ Continuamos con la serie de tutoriales sobre Symfony 2 y en esta ocasión vamos 
 
 Comenzaremos definiendo la ruta de la página principal. Si recuerdas la entrada sobre la [creación del bundle y el modelo de datos](/2012/11/08/tutorial-symfony2-creacion-bundle-y-modelo-datos.html) ya indicamos donde podemos encontrar el fichero de rutas. Así que vamos a la carpeta *app/config* y abrimos el fichero **routing.yml**. En mi caso el contenido de este fichero es el siguiente:
 
-    jhernandz_blog:
-        resource: "@jhernandzBlogBundle/Resources/config/routing.yml"
-        prefix:   /
+```yaml
+jhernandz_blog:
+    resource: "@jhernandzBlogBundle/Resources/config/routing.yml"
+    prefix:   /
+```
 
 <!--more-->
 
@@ -21,9 +23,11 @@ Después de explicar cada uno de los elementos del fichero nos damos cuenta que 
 
 Ahora abrimos el fichero *src/jhernandz/BlogBundle/Resources/config/routing.yml* y nos encontramos que este fichero contiene lo siguiente:
 
-    jhernandz_blog_homepage:
-        pattern:  /hello/{name}
-        defaults: { _controller: jhernandzBlogBundle:Default:index }
+```yaml
+jhernandz_blog_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: jhernandzBlogBundle:Default:index }
+```
 
 Esta ruta es una ruta de ejemplo que se crea por defecto. Si miramos la clave **pattern** nos indica que cuando en la url aparezca la cadena */hello* seguida de algo (al poner un nombre entre las llaves {} indicamos que en esa posición de la ruta aparecerá una cadena que posteriormente enviaremos al controlador en una variable que en este caso se llamara *name*) se ejecutará por el controlador que indicaremos en la clave **defaults**, en este caso el método *index* del controlador *Default* del bundle *jhernandzBlogBundle*.
 
@@ -31,15 +35,17 @@ Podemos abrir el fichero *src/jhernandz/BlogBundle/Controller/DefaultController.
 
 Una vez finalizadas estas explicaciones vamos a borrar todo el contenido del fichero *routing.yml* del bundle y vamos a añadir lo siguiente:
 
-    home:
-        pattern: /
-        defaults: { _controller: jhernandzBlogBundle:Default:index }
+``` yaml
+home:
+    pattern: /
+    defaults: { _controller: jhernandzBlogBundle:Default:index }
+```
 
 Hemos creado una ruta a la que llamamos *home* que se ejecutará cada vez que accedamos a la raíz del sitio (/) y llamará al método *index* del controlador *Default*. La finalidad de esta ruta es que cuando alguien acceda a nuestro blog se le muestren todas las entradas, una detrás de otra y ordenadas cronológicamente.
 
 El siguiente paso que vamos a dar es crear un layout para nuestro blog. Un layout lo podemos definir como el esqueleto de nuestro sitio web, es toda la estructura que va a permanecer del mismo modo en todas nuestras páginas como pueden ser el título, el pie ... Los layouts los podemos definir a nivel de bundle, añadiéndolos bajo la ruta *Resources/views/* de cada bundle o a nivel de la aplicación en la ruta *app/Resources/views/*. Los layouts se pueden heredar, es decir, se puede definir un layout a nivel de aplicación y luego a nivel de bundle heredarlo y añadirle nuevas características. En nuestro caso, únicamente vamos a tener un layout a nivel de aplicación, así que abrimos el fichero *app/Resources/views/base.html.twig* y añadimos lo siguiente:
 
-{% highlight html linenos %}
+``` html
 <!DOCTYPE html>
 <html>
   <head>
@@ -71,7 +77,7 @@ El siguiente paso que vamos a dar es crear un layout para nuestro blog. Un layou
     {% raw %}{% block javascripts %}{% endblock %}{% endraw %}
   </body>
 </html>
-{% endhighlight %}
+```
 
 Como podemos ver casi todo es código HTML que define la estructura general del blog. Pero además podemos ver algunas líneas que no contienen código HTML, este código esta escrito en Twig y gracias a él definiremos las plantillas que tendrá nuestra aplicación. Las llamadas a funciones de Twig, siempre irán entre **{% raw %}{{{% endraw %}** y **{% raw %}}}{% endraw %}**, mientras que las instrucciones irán entre **{% raw %}{%{% endraw %}** y **{% raw %}%}{% endraw %}**. En este código podemos ver 3 llamadas a funciones y 4 instrucciones.
 
@@ -83,7 +89,7 @@ Para el diseño del blog voy a usar el [bootstrap](http://getbootstrap.com/2.3.2
 
 Además del bootstrap vamos a añadir una hoja de estilo para aplicar algunos estilos propios en nuestro blog y personalizarlo un poco. Para ello creamos un fichero llamado *post.css* dentro de *src/jhernandz/BlogBundle/Resources/public/css* y ponemos lo siguiente:
 
-{% highlight css linenos %}
+``` css
 .post
 {
   box-shadow: 5px 5px 5px #888888; 
@@ -97,17 +103,19 @@ Además del bootstrap vamos a añadir una hoja de estilo para aplicar algunos es
   font-size: 12px; 
   margin: 20px auto -10px;
 }
-{% endhighlight %}
+```
 
 Ahora accedemos a una terminal y tecleamos lo siguiente:
 
-    > php app/console assets:install
+``` none
+> php app/console assets:install
+```
 
 Este comando copiará los estilos que acabamos de agregar, las imágenes y los scripts del bundle en la carpeta web/bundles/jhernandzblog para que podamos acceder a ellos desde las paginas que creemos. Una pregunta que puede aparecer en este momento es el porque copiamos primero estos ficheros dentro del bundle si después vamos a copiarlos a la carpeta web. La respuesta es porque de esta forma, podemos mover el bundle a otra aplicación y todos los estilos que tenga aplicado el bundle también nos los llevaremos.
 
 A continuación vamos a crear la plantilla principal de nuestro blog que será la que se muestre nada mas acceder a él. Para ello vamos a la ruta *src/jhernandz/BlogBundle/Resources/views/Default* y abrimos para editar el fichero *index.html.twig*, en caso de que no exista este fichero lo creamos. El código que pondremos será el siguiente:
 
-{% highlight html linenos %}
+``` html
 {% raw %}{% extends '::base.html.twig' %}{% endraw %}
 
 {% raw %}{% block stylesheets %}{% endraw %}
@@ -134,7 +142,7 @@ A continuación vamos a crear la plantilla principal de nuestro blog que será l
     {% raw %}{% endfor %}{% endraw %}
 
 {% raw %}{% endblock %}{% endraw %}
-{% endhighlight %}
+```
 
 La primera línea de la plantilla utiliza la instrucción **extends** para heredar de una plantilla que indicamos al lado de la instrucción. En este caso, el nombre de la plantilla lo hemos precedido del símbolo *::* que le indicará a Twig que busque esta plantilla en la ruta *app/Resources/views*. Si hubiésemos querido que heredara de otra plantilla que estuviese alojada en algún bundle, simplemente tendríamos que haber puesto la ruta del bundle sin los *::*
 
@@ -146,7 +154,8 @@ Si continuamos tenemos más llamadas a distintos métodos de la clase post en la
 
 En este momento ya tenemos la página de inicio de nuestro blog completa, ahora para poder ver como queda vamos a editar el controlador con unos datos de prueba para simplemente ver cual es el resultado. Para ello editamos el fichero *DefaultController.php* que se encuentra en la ruta *src/jhernandz/BlogBundle/Controller* y ponemos el siguiente código:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 namespace jhernandz\BlogBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -177,8 +186,8 @@ class DefaultController extends Controller
             'sed velit vulputate eleifend sed et quam. Maecenas ' .
             'laoreet dictum tellus, eu dictum turpis tempor et. ' .
             'Suspendisse potenti. Nunc turpis mi, tristique ' .
-            'ac rhoncus quis, eleifend quis tortor.
-        ');
+            'ac rhoncus quis, eleifend quis tortor'.
+        );
 
         $posts[] = $post;
     }
@@ -191,7 +200,7 @@ class DefaultController extends Controller
     );
   }
 }
-{% endhighlight %}
+```
 
 De momento no quiero hablar mucho sobre el controlador ya que lo veremos en la siguiente entrada. Simplemente diré que se ha creado un autor, varios posts y finalmente lo hemos pasado a la plantilla con el método **render** indicando la plantilla que se va a ejecutar y pasándole los posts en una variable llamada *posts*.
 

@@ -13,24 +13,32 @@ La primera de ellas consiste en descargar un archivo .zip o .tgz con todos los e
 
 La segunda forma de obtener Silex es mediante Composer. Para ello tenemos que crear una carpeta en el directorio que vayamos a trabajar y dentro de ella crear un fichero llamado *composer.json* en este fichero indicaremos las librerías y la versión de ellas que necesitamos en formato json. El nuestro nos quedaría de la siguiente forma:
 
-    {
-        "require": {
-            "silex/silex": "1.0.*"
-        },
-        "minimum-stability": "dev"
-    }
+``` json
+{
+    "require": {
+        "silex/silex": "1.0.*"
+    },
+    "minimum-stability": "dev"
+}
+```
 
 Con el fichero creado, abrimos un terminal y escribimos lo siguiente para descargar composer e instalarlo en nuestro directorio de trabajo.
 
-    > curl -s http://getcomposer.org/installer | php
+``` none
+> curl -s http://getcomposer.org/installer | php
+```
 
 En caso de no tener instalado curl podemos descargar el fichero desde la ruta http://getcomposer.org/installer y guardarlo en nuestro directorio de trabajo como installer.php, posteriormente ejecutamos en un terminal lo siguiente para instalarlo:
 
-    > php installer.php
+``` none
+> php installer.php
+```
 
 Una vez que tenemos composer instalado vamos a decirle que nos instale las dependencias de nuestro proyecto, en este caso Silex, para ello de nuevo en un terminal escribimos:
 
-    > composer.phar install
+``` none
+> composer.phar install
+```
 
 Al finalizar la descarga de las dependencias creamos una carpeta llamada *web* y comenzamos a trabajar en ella.
 

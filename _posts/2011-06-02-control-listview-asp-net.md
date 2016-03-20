@@ -12,7 +12,7 @@ Para comenzar tenemos que crear un nuevo proyecto web ASP .NET, en mi caso los d
 
 Una vez que tenemos la base de datos definida y con datos, abrimos el WebForm Default.aspx y arrastramos a él un control ListView y un SqlDataSource. Primero configuraremos el SqlDataSource, lo seleccionamos y en el modo de diseño pulsamos en la flecha que aparece al lado del control. Se nos abrirá un menú en el cual pulsaremos en la entrada *Configurar origen de datos...*. En la primera pantalla que aparece tenemos que seleccionar la cadena de conexión a la base de datos, posteriormente pulsaremos el botón siguiente. En la pantalla que aparezca, seleccionamos el radio button *Especificar una instrucción SQL o un procedimiento almacenado personalizado* y le damos a siguiente. Por último, en la pantalla final vamos a rellenar todas las consultas para poder tener toda la funcionalidad que nos proporciona el ListView. Para ello en cada una de las pestañas ponemos las siguientes sentencias:
 
-{% highlight csharp linenos %}
+``` csharp
 //Pestaña select
 SELECT id, nombre, superficie, habitantes FROM poblaciones
 
@@ -26,7 +26,7 @@ INSERT poblaciones (nombre, superficie, habitantes)
 
 //Pestaña delete
 DELETE FROM poblaciones WHERE id = @id
-{% endhighlight  %}
+```
 
 La base de datos ha sido configurada de forma que la clave primaria es autoincrementable, de forma que en el insert no tenemos que tener en cuenta ese campo. Una vez que finalizamos la configuración del SqlDataSource pasamos a configurar el ListView. Seleccionamos el control en la vista de diseño y pulsamos la flecha que sale al lado del control. En el menú que aparece, donde indica *Elegir origen de datos* seleccionamos el SqlDataSource que acabamos de configurar.
 
@@ -56,7 +56,7 @@ Como podemos ver, el diseño nos ha dividido los datos en filas y en cada fila t
 
 A continuación explicaré una a una las distintas secciones para entender cuál es la utilidad de cada una. Comencemos por la sección **LayoutTemplate**. El código que podemos ver en esta sección es el siguiente:
 
-{% highlight csharp linenos %}
+``` csharp
 <table runat="server">
   <tr runat="server">
     <td runat="server">
@@ -82,25 +82,25 @@ A continuación explicaré una a una las distintas secciones para entender cuál
     </td>
   </tr>
 </table>
-{% endhighlight  %}
+```
 
 Este código muestra el diseño externo que tendrán nuestros datos. Como podemos ver se trata de una tabla que contiene dos filas y una celda cada fila. En la primera fila, hay otra tabla con una única fila en la cual se irán rellenando los datos devueltos por el SqlDataSource con el formato que indiquemos en el resto de secciones. Un detalle en el que nos tenemos que fijar es en el ID que tiene esta fila **groupPlaceholder** Antes hemos mencionado que diremos que las celdas de la fila donde se muestran los datos los llamaremos grupos y esté ID está indicando que el código que pongamos en la sección **GroupTemplate** reemplazará está fila por su contenido.
 
 Si miramos ahora la sección **GroupTemplate** el código que contiene es el siguiente:
 
-{% highlight csharp linenos %}
+``` csharp
 <tr ID="itemPlaceholderContainer" runat="server">
   <td ID="itemPlaceholder" runat="server">
   </td>
 </tr>
-{% endhighlight  %}
+```
 
 Como hemos dicho, la fila del LayoutTemplate con el id groupPlaceHolder será remplazada por el contenido de esta sección que contiene una fila con una celda cuyo id es **itemPlaceholder**. Esta celda se repetirá tantas veces como hallamos indicado en la propiedad **GroupItemCount** del ListView. Además dentro de esa celda se pondrá el código que indiquemos en las secciones **ItemTemplate**, **AlternatingItemTemplate**, **EditItemTemplate**, **EmptyItemTemplate** y **SelectedItemTemplate**.
 
 
 La siguiente sección que vamos a examinar será el **EmptyDataTemplate**. El código que indiquemos en esta sección será lo que se muestre cuando el SqlDataSource no devuelva ningún dato. En el caso actual mostrará una fila con el mensaje: "No se han devuelto datos".
 
-{% highlight csharp linenos %}
+``` csharp
 <table runat="server" style="background-color: #FFFFFF;
     border-collapse: collapse; border-color: #999999;
     border-style:none; border-width:1px;">
@@ -110,13 +110,13 @@ La siguiente sección que vamos a examinar será el **EmptyDataTemplate**. El c�
     </td>
   </tr>
 </table>
-{% endhighlight  %}
+```
 
 Seguimos con la sección **EmptyItemTemplate** el código de esta sección se mostrará cuando tengamos datos que mostrar, pero estos no consigan rellenar todos los elementos que hemos indicado. Es decir, si recuperamos únicamente dos poblaciones se mostrarían en las dos primeras celdas y en la tercera se mostraría el código incluido en esta sección.
 
 Continuamos con **InsertItemTemplate**, en esta sección pondremos los controles que queremos que se muestren a la hora de realizar una nueva inserción en la base de datos. Como podemos ver por defecto nos ha puesto los TextBox para rellenar todos los campos de la base de datos a excepción del id. Hay que indicar que con la propiedad del ListView **InsertItemPosition** podemos indicar si queremos que estos campos aparezcan al final del resto de elementos o al principio de todos ellos.
 
-{% highlight csharp linenos %}
+``` html
 <td runat="server" style="" >
   nombre:
   <asp:TextBox ID="nombreTextBox" runat="server" 
@@ -135,11 +135,11 @@ Continuamos con **InsertItemTemplate**, en esta sección pondremos los controles
     Text="Borrar" />
   <br />
 </td>
-{% endhighlight  %}
+```
 
 Para finalizar con las secciones nos quedan los elementos **SelectedItemTemplate**, **ItemTemplate**, **EditItemTemplate** y **AlternatingItemTemplate**. Todos ellos representan los datos de los elementos, el primero indica como mostrar los datos cuando el item está seleccionado, el segundo como se representan los elementos en estado normal, el tercero en modo de edición y el cuarto si queremos hacer alguna diferencia entre elementos alternos, como se mostrarán los segundos. A excepción de la sección editar que contiene un formulario similar al de insertar, el código del resto de secciones es similar cambiando únicamente el color de fondo.
 
-{% highlight csharp linenos %}
+``` html
 //EditItemTemplate
 <td runat="server" style="background-color:#008A8C;color: #FFFFFF;">
   id:
@@ -182,13 +182,13 @@ Para finalizar con las secciones nos quedan los elementos **SelectedItemTemplate
            Text="Editar" />
   <br />
 </td>
-{% endhighlight  %}
+```
 
 Una vez que ya conocemos todas las secciones de las que se compone el ListView, vamos a hacer algunas pequeñas modificaciones para crear un aspecto visual mejor. Comenzamos eliminando en todas las secciones la visualización del id, ya que este campo no se le debería mostrar al usuario. También borramos la etiqueta \<br /\> que separa los botones de editar y modificar en las secciones ItemTemplate, AlternatingItemTemplate y en SelectedItemTemplate. Hacemos lo mismo en la sección EditItemTemplate con los botones de actualizar y cancelar.
 
 Después de esto el resultado final que obtenemos es como muestra la siguiente imagen:
 
-![Resultado final](/uploads/posts/images/resultado_lv.png)
+![Resultado final](/uploads/posts/images/resultado_lv.png){:width="750px"}
 
 Con esto, ya tenemos el ListView completamente operativo. Podemos realizar inserciones, ediciones y borrado de datos de una forma sencilla y no nos ha costado nada crearlo gracias este control. Si quieres descargar el proyecto que he utilizado para realizar esta entrada puedes obtenerlo desde [aquí](/uploads/posts/samples/ListViewSample.rar).
 

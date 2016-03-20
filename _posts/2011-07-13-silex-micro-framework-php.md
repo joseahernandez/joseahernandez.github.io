@@ -20,19 +20,21 @@ Lo primero que tenemos que hacer es [descargar Silex](http://silex.sensiolabs.or
 
 El primero es un fichero **.htaccess** para configurar apache. Normalmente todos los servidores apache aceptan este tipo de fichero y solamente necesitamos colocarlo en la carpeta de nuestro sitio. El contenido del fichero es el siguiente:
 
-    <IfModule mod_rewrite.c>
-        RewriteEngine On
-        #RewriteBase /path/to/app
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteRule ^(.*)$ index.php [QSA,L]
-    </IfModule>
+``` none
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /path/to/app
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+```
 
 Si cuando estemos probando la aplicación vemos que tenemos algún problema con las urls, es posible que tengamos que eliminar el comentario de la línea RewriteBase e indicar la ruta a nuestra carpeta para que todo funcione correctamente, aunque a mí así me ha funcionado bien.
 
 El segundo fichero que vamos a crear lo llamaremos **index.php** y es donde escribiremos los controladores para todas nuestras acciones. Para comenzar escribimos lo siguiente:
 
-{% highlight php linenos %}
+``` php
 <?php
   require_once 'silex.phar';
 
@@ -42,12 +44,13 @@ El segundo fichero que vamos a crear lo llamaremos **index.php** y es donde escr
 
   $app->run();
 ?>
-{% endhighlight  %}
+```
 
 En la primera línea incluimos el fichero de Silex que nos hemos descargado anteriormente. La segunda línea creamos un nuevo objeto de tipo Application y en la tercera línea lanzamos a ejecución la aplicación. De momento ya tenemos la configuración básica realizada, ahora vamos a escribir los controladores donde indica el comentario. Borramos la línea del comentario y escribimos lo siguiente:
 
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 $app->get('/', function()  {
   
   return '<html><head><title>Aplicación de Ejemplo Silex</title></head>' .
@@ -58,13 +61,14 @@ $app->get('/', function()  {
             '<input type="submit" value="Aceptar" />' .
             '</form></body></html>';
 });
-{% endhighlight  %}
+```
 
 En la primera línea utilizamos el método **get** del objeto Application para indicar que tiene que responder a las solicitudes que le lleguen mediante get a la ruta que indicamos en el primer argumento, en este caso **/** que es la ruta principal. Como segundo parámetro indicamos la función que queremos que se ejecute cuando se reciba esta petición.
 
 En nuestro caso simplemente respondemos con un código html que genera un formulario con un campo. Vamos a crear ahora otro controlador.
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 $app->post('/saludar', function() use($app) {
 
   return '<html><head><title>Aplicación de Ejemplo Silex</title></head>' .
@@ -73,7 +77,7 @@ $app->post('/saludar', function() use($app) {
             '</strong>, ya tienes tu primera aplicación con Silex.</p>' .
             '</body></html>';
 });
-{% endhighlight  %}
+```
 
 En esta ocasión esperamos una solicitud por **post** a la ruta **/saludar**. Como novedad, le indicamos a la función que vamos a hacer uso de la variable $app que es externa a la función, indicándolo con la sentencia **use($app)**. El código simplemente genera una pantalla en la que recuperamos el nombre del input con la sentencia **$app['request']->get('nombre')**.
 

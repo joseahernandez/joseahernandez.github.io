@@ -45,7 +45,7 @@ Ahora crearemos la interfaz para manejar nuestra aplicación. No voy a describir
   
 Ahora nos centraremos en los métodos que usamos para consultar, insertar, editar y eliminar los datos con la ayuda del modelo que hemos creado. Lo primero será consultar los datos de la base de datos para que una vez que arranque la aplicación cargue todos los contactos disponibles. Para realizar esta tarea en el evento **Form1_Load** llamaremos al método **CargarContactos**. El código de este método será el siguiente:
  
-{% highlight csharp linenos %}
+``` csharp
 private void CargarContactos()
 {
   // Limpiamos el ListView de los contactos
@@ -69,7 +69,7 @@ private void CargarContactos()
     }
   }
 }
-{% endhighlight %}
+```
  
 El código creo que es bastante claro, pero resumiendo, toda la funcionalidad de acceso a la base de datos la lleva a cabo el objeto **AgendaContext** sobre el cual aplicamos la select en [LinQ](http://msdn.microsoft.com/en-us/netframework/aa904594). Un punto fuerte de LinQ es que nos ayuda con intellisense a realizar la consulta y que realiza la comprobación de esta en tiempo de compilación, con lo que no tendremos que estar ejecutando la aplicación constantemente para saber si hemos escrito correctamente la sentencia.
  
@@ -81,7 +81,7 @@ Es un formulario bastante básico, simplemente tiene dos campos para poder indic
 
 Ahora es el momento de ver el método que se ejecuta al lanzarse el evento **Click** del botón de crear un nuevo contacto:
 
-{% highlight csharp linenos %}
+``` csharp
 private void bNuevoContacto_Click(object sender, EventArgs e)
 {
   // Creamos una instancia del formulario de gestion de contacto
@@ -109,13 +109,13 @@ private void bNuevoContacto_Click(object sender, EventArgs e)
     }
   }
 }
-{% endhighlight %}
+```
 
 Abrimos el formulario antes mencionado para solicitar el nombre y el apellido del contacto. Cuando se pulsa en el botón Aceptar se crea una instancia de **Contacto** y con la clase **AgendaContext** añadimos ese nuevo objeto a la colección de contactos, para finalizar guardamos los cambios y cargamos de nuevo los contactos.
  
 El método que se ejecuta para el evento del botón editar contacto es muy similar al anterior, su código es este:
  
-{% highlight csharp linenos %}
+``` csharp
 private void bEditarContacto_Click(object sender, EventArgs e)
 {
   if (listViewContactos.SelectedItems.Count > 0)
@@ -149,13 +149,13 @@ private void bEditarContacto_Click(object sender, EventArgs e)
     }
   }
 }
-{% endhighlight %}
+```
 
 Volvemos a usar el formulario anterior pero esta vez en el constructor le pasamos el nombre y los apellidos del contacto que se ha seleccionado en el ListView. Cuando modificamos los datos y pulsamos el botón aceptar, lo que hacemos es obtener el id del contacto que está seleccionado. El id si recuerdas el método **CargarContactos** lo hemos almacenado en el subitem 2, por lo tanto lo recuperamos de esa posición. Una vez obtenido, realizamos otra consulta en la  cual obtenemos el **Contacto** que tiene ese id. Posteriormente modificamos sus propiedades nombre y apellidos con los datos del formulario y guardamos los cambios.
 
 El método para el evento evento del botón eliminar un Contacto es el siguiente:
  
-{% highlight csharp linenos %} 
+``` csharp 
 private void bEliminarContacto_Click(object sender, EventArgs e)
 {
   if (listViewContactos.SelectedItems.Count > 0)
@@ -184,13 +184,13 @@ private void bEliminarContacto_Click(object sender, EventArgs e)
     }
   }
 }
-{% endhighlight %}
+```
  
 Simplemente obtenemos el id del Contacto seleccionado, lo recuperamos con una consulta, lo eliminamos y guardamos los cambios.
  
 Los métodos para los eventos de los botones de teléfonos son muy similares a los visto antes, a continuación pongo su código:
 
-{% highlight csharp linenos %}  
+``` csharp  
 private void bNuevoTelefono_Click(object sender, EventArgs e)
 {
   if (listViewContactos.SelectedItems.Count > 0)
@@ -279,7 +279,7 @@ private void bEliminarTelefono_Click(object sender, EventArgs e)
     }
   }
 }
-{% endhighlight %}
+```
 
 Como supondrás el formulario para la gestión de los teléfonos es similar al de los contactos.
 
@@ -287,7 +287,7 @@ Como supondrás el formulario para la gestión de los teléfonos es similar al d
  
 El último método que voy a comentar será el de cargar los teléfonos de los contactos, este método se ejecutará cuando se lance el evento **SelectedIndexChange** del ListView de Contactos y su implementación es la siguiente:
 
-{% highlight csharp linenos %} 
+``` csharp 
 private void CargarTelefonos()
 {
   listViewTelefonos.Items.Clear();
@@ -313,7 +313,7 @@ private void CargarTelefonos()
     }
   }
 }
-{% endhighlight %}
+```
  
 Las acciones que realiza este método son: limpiar el listView de teléfonos y recuperar el contacto que ha sido seleccionado en el listView de contactos. Posteriormente recorre todos sus teléfonos y los añade en el listView de teléfonos.
 

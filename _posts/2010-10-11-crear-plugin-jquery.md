@@ -2,7 +2,6 @@
 layout: post
 comments: false
 title: Crear un plugin en JQuery
-date: 2010-10-11 14:39:00
 ---
 
 [JQuery](http://jquery.com/) es una librería muy útil y fácil de usar para todo el desarrollo JavaScript que tengamos que hacer en una página web. Gracias ha ella podemos desarrollar de manera más rápida que si lo hiciéramos usando simplemente JavaScript. Además cuenta con una gran cantidad de plugins para realizar casi cualquier cosa que puedas imaginar. Estos plugins al igual que la libreria son bastante sencillos de utilizar, además si lo necesitamos también podemos crearnos nuestro propio plugin. Sobre la creación de un plugin de JQuery es de lo que tratará esta entrada, así que vamos a ponernos manos a la obra.
@@ -16,19 +15,19 @@ Para comenzar veamos una imagen del resultado final que vamos a obtener. La func
 
 Ahora que ya sabemos como tiene que quedar vamos a comenzar a programar, primeramente nos creamos un archivo donde almacenaremos nuestro plugin, yo lo he llamado seleccion.js en el escribimos las siguiente lineas:
 
-{% highlight javascript linenoss %}
+``` javascript
 (function ($) {
   $.fn.seleccion = function () {
     /* código del plugin */
   };
 })(jQuery);
-{% endhighlight %}
+```
 
 Esta es la forma en la que vamos a declarar nuestro plugin. La linea *$.fn.seleccion = function() { };* es la declaración de la función que va a realizar nuestro plugin, dentro de ella programaremos todo nuestro código. El resto de lineas *(function ($){ ... })(jQuery);* hacen que el plugin no tenga problemas con otras librerias que utilicen el símbolo del $.
 
 Nuestro plugin únicamente va a tener dos métodos, el constructor (metodo init) que se ejecutará cuando se llama al plugin por primera vez y un método que nos permitirá cargar los datos en la lista. Este segundo método, como podemos ver, recibe un parametro que nos indicará cual es la capa (elemento div) sobre la que trabajará esta función. Además de los métodos, tendremos unas propiedades que se podrán inicializar cuando se llame al plugin o que tomarán unos valores por defecto y le darán comportamiento al plugin. Todo esto lo declaramos en nuestro fichero de la siguiente forma:
 
-{% highlight javascript linenos %}
+``` javascript
 (function ($) {
   var propiedades = {
     "datos": "",
@@ -44,13 +43,13 @@ Nuestro plugin únicamente va a tener dos métodos, el constructor (metodo init)
     /* código del plugin */
   };
 })(jQuery);
-{% endhighlight %}
+```
 
 En la declaración de la variable propiedades indicamos cuales son los campos que se podrán inicializar en el constructor del plugin. En este caso serán: los datos que tenga que mostrar en la lista, el ancho y el alto con el que queremos que se muestre. Además también tenemos un array llamado *valoresExistentes*, que se encargará de almacenar los valores que se han seleccionado.
 
 Ahora añadimos en el cuerpo de la función que va ha ejecutar nuestro plugin las acciones que queremos que realice quedándonos de la siguiente manera:
 
-{% highlight javascript linenos %}
+``` javascript
 $.fn.seleccion = function (method) {
     if (methods[method]) {
         return methods[method].apply(this, 
@@ -61,21 +60,21 @@ $.fn.seleccion = function (method) {
         $.error("El metodo " + method + " no existe en el plugin selector");
     }
 };
-{% endhighlight %}
+```
 
 Este código se encargará de llamar a los métodos correspondientes según los parametros con los que invoquemos al plugin. En el primer *if* comprobaremos si existe un metodo en nuestro atributo *methods* con el nombre que hemos indicado. En caso de que exista lo llamará pasandole los parametros que posteriormente le hayamos indicado en la llamada. Si no existe ningún metodo con ese nombre, se llamará al metodo *init* al cual también le pasaremos parametros si los hemos indicado en la llamada. Por último si no existe ningún método y tampoco se está llamando a init, mostraremos un mensaje de error. Un ejemplo de posibles llamadas para el plugin podrían ser las siguientes:
 
-{% highlight javascript linenos %}
+``` javascript
 $("div").seleccion(); // Llama al metodo init
 $("div").seleccion({ ancho: 400 }); // Llama al metodo init con un parametro
 
 // Llama al metodo cargarDatos con un parametro
 $("div").seleccion("cargarDatos", "parametro");
-{% endhighlight %}
+```
 
 Pasemos ahora al trabajo duro. Comenzaremos por la funcion *cargarDatos* que es mas sencilla, el código es el siguiente:
 
-{% highlight javascript linenos %}
+``` javascript
 cargarDatos: function(destino) {
     destino.children().remove();
     // Creamos una tabla donde pondremos todas las opciones disponibles
@@ -130,11 +129,11 @@ cargarDatos: function(destino) {
     // Por último añadimos la tabla a la capa que pasamos como argumento.
     destino.append(table);
 }
-{% endhighlight %}
+```
 
 Una vez que tenemos claro cual es el trabajo que realiza esta función pasemos a ver la que nos queda, la funcion *init*:
 
-{% highlight javascript linenos %}
+``` javascript
 init: function(parametros) {
     // Comprobamos si ya existe un elemento con el mismo id, es caso 
     // afirmativo finalizamos
@@ -270,8 +269,8 @@ init: function(parametros) {
             });
         });
         
-        // Almacenamos el objeto actual porque dentro de una funcion JQuery el atributo this se 
-		// refiere al elemento al que se le está aplicando la función
+        // Almacenamos el objeto actual porque dentro de una funcion JQuery el 
+        //atributo this se refiere al elemento al que se le está aplicando la función
         var __this = this;
         // Creamos el boton aceptar
         var aceptar = $("<input type='button' name='aceptar' value='Aceptar' />");
@@ -284,7 +283,8 @@ init: function(parametros) {
             for(var i = 0; i < valoresExistentes.length; i++)
             ul.append("<li>" + valoresExistentes[i] + "</li>")
             
-            // Borramos todo el contenido de la capa a la que se le está aplicando el plugin
+            // Borramos todo el contenido de la capa a la que se le está aplicando 
+            // el plugin
             $(__this).children().remove();
             // Le añadimos la nueva lista a la capa
             $(__this).append(ul);
@@ -296,21 +296,22 @@ init: function(parametros) {
         });
         
         // Añadimos los botones creados antes al control
-        contenedor.append($("<p class='derecha'></p>").append(cancelar).append("&amp;nbsp;")
-		          .append(aceptar));
+        contenedor.append($("<p class='derecha'></p>").append(cancelar)
+            .append("&amp;nbsp;").append(aceptar));
         contenedor.css("display", "none");
         // Mediante un efecto mostramos el control creado
         $("body").append(contenedor.slideDown("slow"));
     });
     
-    // Devolvemos this porque de esta forma podemos encadenar llamadas a funciones JQuery
+    // Devolvemos this porque de esta forma podemos encadenar llamadas a 
+    // funciones JQuery
     return this;
 }
-{% endhighlight %}	
+```
 
 Con esto tenemos finalizado nuestro pequeño plugin en JQuery, ahora unicamente aplicandole unos estilos con una css obtendriamos el aspecto visual que quisieramos. En mi caso yo le he aplicado los siguientes estilos para lograr el aspecto final:
 
-{% highlight css linenos %}
+``` css
 .contenedor {
     border: 3px solid #5993EF;
     padding: 4px; 
@@ -339,11 +340,11 @@ Con esto tenemos finalizado nuestro pequeño plugin en JQuery, ahora unicamente 
 }
 
 .derecha { text-align: right; }
-{% endhighlight %}
+```
 
 Para finalizar nos quedaria enlazarlo todo en la página donde vayamos a utilizarlo y llamar a nuestro plugin. Aquí dejo el ejemplo que he usado yo para realizar el plugin:
 
-{% highlight html linenos %}
+``` html
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -384,6 +385,6 @@ Para finalizar nos quedaria enlazarlo todo en la página donde vayamos a utiliza
     </script>
   </body>
 </html>
-{% endhighlight %}
+```
 
 Con todos los pasos anteriores hemos finalizado con el desarrollo de un plugin JQuery, si quieres descargar el código del ejemplo puedes hacerlo desde [aquí](/uploads/posts/samples/plugin-jquery.rar).

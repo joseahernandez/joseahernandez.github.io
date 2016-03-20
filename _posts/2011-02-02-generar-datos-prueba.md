@@ -16,6 +16,6 @@ Además podemos especificar algunas características más de los datos, como el 
 
 Aquí dejo un par de captura de datos que he generado, la verdad es que esta herramienta tiene una grandísima utilidad.
 
-![Especificación de los datos](/uploads/posts/images/generatedata_especificacion.png)
+![Especificación de los datos](/uploads/posts/images/generatedata_especificacion.png){:width="750px"}
 
 ![Datos generados](/uploads/posts/images/generatedata_datos.png)

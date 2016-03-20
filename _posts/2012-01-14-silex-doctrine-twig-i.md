@@ -15,34 +15,36 @@ Comenzamos preparando nuestro directorio de trabajo, creamos una carpeta que lla
 
 Vamos a crear un fichero en la carpeta *Software* y le pondremos de nombre **.htaccess**. La función de este fichero será redirigir todas las peticiones al fichero index.php que crearemos a continuación. El contenido de **.htaccess** es el siguiente:
 
-    <ifmodule mod_rewrite.c="">
-        RewriteEngine On
-        RewriteBase /software
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteRule ^(.*)$ index.php [QSA,L]
-    </ifmodule>
+``` none
+<ifmodule mod_rewrite.c="">
+    RewriteEngine On
+    RewriteBase /software
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</ifmodule>
+```
 
 Hay que mencionar que en este fichero he insertado la línea **RewriteBase** porque la carpeta donde voy a guardar el proyecto no es la carpeta raíz de mi sitio. Es decir, para acceder al proyecto escribiré en mi navegador *https://localhost/software* si por el contrario estas creando el proyecto apuntando a la carpeta raíz de tu sitio esa línea se debe eliminar.
 
 Como hemos mencionado antes ahora es el turno de crear el fichero **index.php**. En este fichero configuraremos tanto Twig como Doctrine para trabajar con ellos y daremos respuesta a las peticiones que se generen. De momento en el fichero pondremos el siguiente código:
 
-{% highlight php linenos %}
+``` php
 <?php
 require_once 'silex.phar';
 
-$app = new Silex\\Application();
+$app = new Silex\Application();
 
 $app['debug'] = true;
 
-$app->register(new Silex\\Provider\\UrlGeneratorServiceProvider());
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
-$app->register(new Silex\\Provider\\TwigServiceProvider(), array(
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/views',
     'twig.class_path' => __DIR__ . '/vendor'
 ));
 
-$app->register(new Silex\\Provider\\DoctrineServiceProvider(), array(
+$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options' => array(
         'driver'   => 'pdo_mysql',
         'host'     => 'localhost',
@@ -59,7 +61,7 @@ $app['db']->setCharset('utf8');
 // Aqui iran las respuestas a las peticiones
 
 $app->run();
-{% endhighlight %}
+```
 
 En la línea 4 creamos la aplicación Silex. Seguidamente, en la línea 6 nos ponemos en modo debug para indicar que estamos desarrollando la aplicación y que se nos muestre si hay algún error. Cuando pongamos esta aplicación en producción pondremos el modo debug a false. A continuación, en la línea 8 registramos el generador de url. Entre las líneas 10 y 13 registramos Twig, indicamos donde guardaremos las vistas, en este caso crearemos una nueva carpeta que llamaremos *views* dentro de la carpeta *software*. También indicamos donde se encuentra la librería de twig. Entre las líneas 15 y 25 registramos doctrine. Dentro del array **db.options** tenemos que indicar el driver (en este caso usaremos una base de datos mysql por eso usamos el driver pdo_mysql), el host donde está la base de datos, el nombre de la base de datos, el usuario y la contraseña. En el array **db .dbal.class_path** indicaremos la ruta donde hemos guardado las librerías del DBAL de Doctrine y finalmente dentro del array **db.common.class_path** indicaremos la ruta donde están las librerías Common de Doctrine. Con la línea 27 indicamos que las conexiones con la base de datos serán en formato utf8 y para terminar en la línea 31 ponemos en marcha la aplicación.
 
@@ -67,7 +69,8 @@ A continuación vamos a diseñar nuestra base de datos para poder recuperar algu
 
 Vamos a crear ahora la respuesta cuando se solicite la primera página de nuestra aplicación, para ello en el fichero **index.php** justo debajo del comentario *Aquí irán las respuestas a las peticiones* añadimos lo siguiente:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 $app->get('/', function() use ($app) {
     $sql = 'SELECT nombre, descripcion FROM software';
     $software = $app['db']->fetchAll($sql, array());
@@ -76,13 +79,14 @@ $app->get('/', function() use ($app) {
     array('software' => $software)
   );
 })->bind('inicio');
-{% endhighlight %}
+```
 
 En la primera línea estamos indicando que todas las peticiones de tipo GET que vayan a la raíz de nuestro sitio (lo indicamos pasando como primer argumento de la función get la /) van a ejecutar la siguiente función. En la función creamos una select que nos recupere todos los elementos de nuestra tabla y llamamos al método **fetchAll** de Doctrine. Silex nos almacena dentro de *$app['db']* un objeto Doctrine con el cual podemos realizar este tipo de consultas. Finalmente llamamos al objeto twig que Silex nos ha creado en *$app['twig']* y le decimos que renderice la plantilla inicio pasándole el array con todos los elementos recuperados de la base de datos.
 
 La plantilla que muestra los elementos es la siguiente:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 {% raw %}{% extends "layout.twig.html" %}{% endraw %}
 
 {% raw %}{% block content %}{% endraw %}
@@ -112,15 +116,16 @@ La plantilla que muestra los elementos es la siguiente:
   </tbody>
  </table>
 {% raw %}{% endblock %}{% endraw %}
-{% endhighlight %}
+```
 
 No creo que necesite mucha explicación ya que únicamente recorre el array que le hemos pasado y genera una tabla. Lo único que merece mención es la forma de crear los enlaces para editar y eliminar elementos. Cuando trabajamos con Silex y Twig, todas las plantillas de Twig tienen una variable llamada app que hace referencia al objeto de la aplicación. En nuestro caso hace referencia al mismo objeto que la variable $app en nuestro código php. Por lo tanto podemos utilizar el generador de url que hemos registrado anteriormente en el fichero **index.php**.
 
 La forma de generar una url desde código php seria la siguiente:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 $app['url_generator']->generate('editar', array('id' => 1));
-{% endhighlight %}
+```
 
 Pero como estamos trabajando desde la plantilla, tenemos que usar la sintaxis de Twig. Como hemos mencionado en algún artículo anterior, cada vez que en Twig ponemos una variable seguida de un punto y de otra componente, Twig realiza varias comprobaciones para intentar obtener el valor:
 
@@ -132,13 +137,13 @@ Pero como estamos trabajando desde la plantilla, tenemos que usar la sintaxis de
 
 En nuestro caso se utilizará la primera comprobación para indicar que *url_generator* es una componente del array *app* y posteriormente se utilizará la tercera comprobación para indicar que *generate* es un método del objeto *UrlGeneratorServiceProvider*. A continuación le indicaremos hacia que método queremos que nos genere la url indicando la misma cadena que le pondremos en la llamada al método **bind** del método a utilizar. Finalmente tenemos que pasar un array con los valores necesarios para la ruta. Para hacer esto en Twig utilizaremos la sintaxis **{'clave': 'valor'}**. En caso de tener que pasar más de un parámetro la sintaxis será **{'clave1': 'valor1', 'clave2': 'valor2'}**. Con esto tenemos que la llamada anterior al método *generate* en Twig nos quedará de la siguiente forma:
 
-{% highlight html linenos %}
+``` none
 {% raw %}{{ app.url_generator.generate('editar', {'id': 1}) }}{% endraw %}
-{% endhighlight %}
+```
 
 La plantilla inicio.twig.html extiende a la plantilla layout.twig.html cuyo contenido es el siguiente:
 
-{% highlight html linenos %}
+``` html
 <!DOCTYPE html>
 <html>
  <head>
@@ -157,11 +162,12 @@ La plantilla inicio.twig.html extiende a la plantilla layout.twig.html cuyo cont
   </div>
  </body>
 </html>
-{% endhighlight %}
+```
 
 Para finalizar esta entrada vamos a volver al fichero **index.php** y antes de la llamada a **$app->run();** añadiremos el siguiente código:
 
-{% highlight php linenos startinline=true %}
+``` php
+<?php
 $app->get('/insertar', function() use ($app) {
     return '';
 })->bind('insertar');
@@ -173,7 +179,7 @@ $app->get('/editar/{id}', function($id) use ($app) {
 $app->get('/eliminar/{id}', function($id) use ($app) {
     return '';
 })->bind('eliminar');
-{% endhighlight %}
+```
 
 Con este código crearemos todos los métodos que necesitaremos para que nuestro proyecto pueda ejecutarse correctamente y sin ningún error. En una próxima entrada completaremos el código de estos métodos. Si quieres descargar el código de este ejemplo puedes hacerlo desde [aquí](/uploads/posts/samples/silex-doctrine-twig-I.rar).
 

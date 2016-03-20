@@ -12,7 +12,7 @@ Una vez descargado e instalado crearemos nuestro primer servidor web. Para ello 
 
 <!--more-->
 
-{% highlight javascript linenos %}
+``` javascript
 var http = require('http');
 
 http.createServer(function (req, res) {
@@ -21,7 +21,7 @@ http.createServer(function (req, res) {
 }).listen(1333, '127.0.0.1');
 
 console.log('Servidor en marcha');
-{% endhighlight %}
+```
 
 Simplemente con estas 6 líneas ya tenemos un servidor web montado. Expliquemos a continuación cada una de las líneas del programa. Para comenzar la primera línea hace uso de la función **require** que se encarga de importar el modulo http. Este modulo es el encargado de realizar las tareas que están relacionadas con este protocolo, para más información se puede ver la [documentación del modulo http](http://nodejs.org/api/http.html).
 
@@ -37,7 +37,9 @@ Para acabar con el ejemplo tenemos la llamada a **console.log** que se encargar�
 
 Para probar que todo funciona correctamente abrimos un terminal y vamos al directorio donde tengamos guardado el archivo que acabamos de crear. Una vez en el escribimos:
 
-    node servidor.js
+``` none
+node servidor.js
+```
 
 El servidor arrancará y nos mostrará en el terminal el mensaje de log que indicamos en el programa. Si ahora abrimos un navegador y escribimos la siguiente dirección http://localhost:1333 tendríamos que ver por pantalla *Hola mundo*.
 
