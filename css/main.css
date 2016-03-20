@@ -175,7 +175,6 @@ a:hover {
   border: 1px solid #ddd;
   background-color: #eef;
   padding: 0 .4em;
-  margin-bottom: 1.45em;
   font-size: 14px;
   background: #ffffff;
 }
@@ -410,24 +409,16 @@ line-height: 1;
   padding: 5px 15px 5px 5px;
 }
 
-.highlight {
-  font-size: 14px;
+.code {
+  width: 100%;
+}
+
+div.highlighter-rouge {
   margin-bottom: 1.45em;
 }
 
-.highlight pre {
-  padding: 9.5px;
-  background-color: #ffffff;
-}
-
-.highlight pre code {
-  background-color: #ffffff;
-}
-
-.lineno {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -o-user-select: none;
+.post > pre {
+  margin-bottom: 1.45em;
 }
 
 .pagination div {

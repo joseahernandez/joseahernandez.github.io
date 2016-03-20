@@ -3,11 +3,24 @@ author: Jose Hernández
 twitter: josehernandz
 domain: http://joseahernandez.github.io/
 
+lsi: false
+safe: true
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false
+
 markdown: kramdown
 
 kramdown:
   input: GFM
   syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    span:
+      line_numbers: false
+      wrap: false
+    block:
+      line_numbers: true
 
 excerpt_separator: <!--more-->
 
