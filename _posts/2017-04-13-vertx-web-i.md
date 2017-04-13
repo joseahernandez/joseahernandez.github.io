@@ -31,7 +31,7 @@ Si usamos [Maven](https://maven.apache.org) añadiremos en el fichero *pom.xml* 
   </dependency>
 ...
 ```
-
+<!--more-->
 ## Definir rutas
 
 Uno de los componentes core de Vert.x Web es el [Route](http://vertx.io/docs/apidocs/io/vertx/ext/web/Router.html). Este componente se encarga de tener registradas las rutas a las que nuestra aplicación va a responder, para cuando reciba una petición sobre una de ellas llamar a su manejado asociado. 
